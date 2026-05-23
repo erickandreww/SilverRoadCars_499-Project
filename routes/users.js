@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const controller = require("../controllers/users")
 
 /* All Users Routes. */
 // router.get('/bookings', )
@@ -8,8 +9,6 @@ var router = express.Router();
 // router.get('/maintenance/:carId', )
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('Users Page');
-});
+router.get('/', controller.getAllUsers);
 
 module.exports = router;
