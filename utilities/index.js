@@ -15,4 +15,19 @@ Util.getUsersGrid = async function(data) {
   return grid;
 }
 
+Util.getVehiclesGrid = async function (data) {
+  let grid = "";
+  if (data && data.length > 0){
+    grid = '<ul id="inv-display">';
+    data.forEach(vehicle=>{
+      grid += `<li>vehicle: ${vehicle.brand} ${vehicle.model} ${vehicle.year} ${vehicle.dailyPrice} </li>`
+    })
+    grid += "</ul>";
+  }
+    else {
+      grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+    }
+    return grid;
+}
+
 module.exports = Util

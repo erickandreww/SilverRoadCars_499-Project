@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
+const controller = require("../controllers/vehiclesController")
 
 /* GET Vehicles Page. */
-router.get('/', function(req, res, next) {
-  res.send('Here we will put the cars and some rent informations');
-});
+router.get('/', controller.getAllVehicles);
 
 // router.get('/:carId', controller.getCar)
 
