@@ -5,6 +5,6 @@ const controller = require("../controllers/vehiclesController")
 /* GET Vehicles Page. */
 router.get('/', controller.getAllVehicles);
 
-// router.get('/:carId', controller.getCar)
+router.get('/:carId', controller.getCar)
 
 module.exports = router;
