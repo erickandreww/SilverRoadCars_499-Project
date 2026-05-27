@@ -33,7 +33,8 @@ Util.getVehiclesGrid = async function (data) {
 Util.getVehiclesGridId = async function (data) {
   let carInformation = "";
   if (data){
-    carInformation += `<p>vehicle: ${data.brand} ${data.model} ${data.year} ${data.dailyPrice} </p>`; 
+    carInformation += `<p>vehicle: ${data.brand} ${data.model} ${data.year} ${data.imageUrl} ${data.color} ${data.category}
+    ${data.fuelType} ${data.transmission} ${data.seats} ${data.mileage} ${data.maintenanceStatus} ${data.dailyPrice} </p>`; 
   }
   else {
       carInformation = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
