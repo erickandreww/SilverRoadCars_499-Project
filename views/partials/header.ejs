@@ -1,0 +1,18 @@
+<header>
+  <a href="/"><img src="/images/logo.png" alt="Logo"></a>
+  <span id="top">Silver Road Cars</span>
+  <button id="menu"></button>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/vehicles">Vehicles</a></li>
+      <li><a href="/contact">Contact Us</a></li>
+      <% if (locals.sessionUser) { %>
+        <li><a href="/logout">Logout (<%= locals.sessionUser.userName %>)</a></li>
+      <% } else { %>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+      <% } %>
+    </ul>
+  </nav>
+</header>
