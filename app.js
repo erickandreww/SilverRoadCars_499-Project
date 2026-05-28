@@ -1,4 +1,5 @@
 var express = require('express');
+const expressLayouts = require("express-ejs-layouts")
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -12,6 +13,8 @@ var app = express();
 // View engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(expressLayouts)
+app.set("layout", "./layouts/layout") 
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -72,6 +75,7 @@ app.use(function(err, req, res, next) {
   var statusCode = err.status || 500;
   res.status(statusCode);
   res.render('errors/error', {
+    title: 'Error',
     message: err.message,
     status: statusCode,
     error: req.app.get('env') === 'development' ? err : {}
