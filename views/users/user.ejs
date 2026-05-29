@@ -1,0 +1,30 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+  <% } else {
+  res.redirect('/')
+} %>
+
+<form action="/admin/users/update" method="post">
+  <input type="hidden" name="userId" value="<%= userId %>">
+
+  <label>Name
+    <input type="text" name="userName" value="<%= userName %>" required>
+  </label>
+
+  <label>Email
+    <input type="email" name="userEmail" value="<%= userEmail %>" required>
+  </label>
+
+  <label>Password
+    <input type="password" name="userPassword" value="<%= userPassword %>" required>
+  </label>
+
+  <label>Role
+    <select name="userRole" required>
+      <option value="standard" <%= userRole === "standard" ? "selected" : "" %>>Standard</option>
+      <option value="manager" <%= userRole === "manager" ? "selected" : "" %>>Manager</option>
+    </select>
+  </label>
+
+  <button type="submit">Update User</button>
+</form>

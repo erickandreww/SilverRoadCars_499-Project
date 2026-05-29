@@ -6,11 +6,12 @@ Util.getUsersGrid = async function(data) {
     if (data && data.length > 0) {
       grid = '<ul id="inv-display">';
       data.forEach(user => {
-        grid += `<li> ${user.userName}</li>`;
+        grid += `<li> ${user.userName}, ${user.userEmail}, ${user.userPassword}, ${user.userRole}, ${user.userId} </li> 
+        <a href="/admin/users/${user.userId}">Edit</a>`;
     });
     grid += "</ul>";
   } else { 
-    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+    grid = '<p class="notice">Sorry, no users could be found.</p>';
   }
   return grid;
 }

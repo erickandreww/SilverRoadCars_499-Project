@@ -1,4 +1,5 @@
 const pool = require("../config/db")
+const crypto = require("crypto");
 
 async function getUserById(userId) {
   const query = `SELECT * FROM "User" WHERE "userId" = $1`;
@@ -18,10 +19,39 @@ async function getAllUsers() {
   return result.rows
 }
 
+async function updateUser(userId, userName, userEmail, userPassword,userRole) {
+  const sql = `
+    UPDATE "User"
+    SET
+      "userName" = $1, "userEmail" = $2, "userPassword" = $3, 
+      "userRole" = $4,"updatedAt" = NOW()
+    WHERE "userId" = $5
+    RETURNING *`
+
+  const result = await pool.query(sql, [
+    userName, userEmail, userPassword, userRole, userId
+  ])
+
+  return result.rows[0]
+}
+
+async function createNewUser(userName, userEmail, userPassword, userRole) {
+  const userId = crypto.randomUUID();
+  
+  const sql = `
+    INSERT INTO "User" ("userId", "userName", "userEmail", "userPassword", "userRole", "createdAt", "updatedAt")
+    VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+    RETURNING *`;
+  
+  const result = await pool.query(sql, [userId, userName, userEmail, userPassword, userRole]);
+  
+  return result.rows[0];
+}
+
 async function createUser(userName, userEmail, hashedPassword) {
   const userId = crypto.randomUUID();
   const query = `
-    INSERT INTO "User" ("userId", "userName", "userEmail", "userPassword", "userRole", "createdAt", "updatedAt")
+    INSERT INTO "Users" ("userId", "userName", "userEmail", "userPassword", "userRole", "createdAt", "updatedAt")
     VALUES ($1, $2, $3, $4, 'client', NOW(), NOW())
     RETURNING *
   `;
@@ -29,4 +59,4 @@ async function createUser(userName, userEmail, hashedPassword) {
   return result.rows[0];
 }
 
-module.exports = { getAllUsers, getUserById, getUserByEmail, createUser }
+module.exports = { getAllUsers, getUserById, getUserByEmail, createUser, createNewUser, updateUser }

@@ -1,0 +1,47 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+    res.redirect('/')
+} %>
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+    <% if (error.msg !== 'Invalid value') { %>
+        <li><%= error.msg %></li>
+  <%  }}) %>
+   </ul>
+<% } %>
+
+<%# messages() %>
+
+<section class="admin-section">
+  <h2>Add New User</h2>
+  <form name="addNewUser" class="addUser" id="addUser-form" action="/admin/users/newUser" method="post">
+    <fieldset>
+      <label for="userName">Name
+        <input type="text" id="userName" name="userName" placeholder="Min of 3 characters" minlength="3"
+          required value="<%= locals.userName || '' %>">
+      </label>
+
+      <label for="userEmail">Email
+        <input type="email" id="userEmail" name="userEmail" placeholder="user@email.com" required value="<%= locals.userEmail || '' %>">
+      </label>
+
+      <label for="userPassword">Password
+        <input type="password" id="userPassword" name="userPassword" 
+          placeholder="Min of 8 characters" minlength="8" required>
+      </label>
+
+      <label for="userRole">Role
+        <select name="userRole" id="userRole" required>
+          <option value="">Choose a Role</option>
+          <option value="standard" <%= locals.userRole === "standard" ? "selected" : "" %>>Standard</option>
+          <option value="manager" <%= locals.userRole === "manager" ? "selected" : "" %>>Manager</option>
+        </select>
+      </label>
+
+      <button type="submit">Create User</button>
+    </fieldset>
+  </form>
+</section>
