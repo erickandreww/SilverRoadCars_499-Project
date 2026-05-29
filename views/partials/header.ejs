@@ -7,8 +7,15 @@
       <li><a href="/">Home</a></li>
       <li><a href="/vehicles">Vehicles</a></li>
       <li><a href="/contact">Contact Us</a></li>
+      
       <% if (locals.sessionUser) { %>
-        <li><a href="/logout">Logout (<%= locals.sessionUser.userName %>)</a></li>
+        <li class="user-nav-item">
+          <% if (sessionUser.clientAvatar) { %>
+            <img src="<%= sessionUser.clientAvatar %>" alt="Profile" class="nav-avatar" width="25" height="25" style="border-radius: 50%; vertical-align: middle; margin-right: 5px;">
+          <% } %>
+          <span>Hello, <%= sessionUser.clientName %></span>
+        </li>
+        <li><a href="/auth/logout">Logout</a></li>
       <% } else { %>
         <li><a href="/login">Login</a></li>
         <li><a href="/register">Register</a></li>

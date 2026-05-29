@@ -9,6 +9,7 @@ router.use('/contact', require('./contact'));
 router.use('/clients', require('./clients'));
 router.use('/users', require('./users'));
 router.use('/admin', require('./admin'));
+router.use('/auth', require('./authRoutes'));
 
 
 /* GET home page. */

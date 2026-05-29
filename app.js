@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var db = require('./config/db');
+require('dotenv').config();
+const passport = require('passport');
+require('./config/passport');
 
 var indexRouter = require('./routes/index');
 
@@ -29,9 +32,12 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Make session user available in all EJS views
 app.use((req, res, next) => {
-  res.locals.sessionUser = req.session.user || null;
+  res.locals.sessionUser = req.user || req.session.user || null;
   next();
 });
 
