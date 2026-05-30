@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-const vehiclesController = require('../controllers/vehiclesController')
 const usersController = require('../controllers/usersController')
+const vehiclesController = require('../controllers/vehiclesController')
 
 
 /* GET users listing. */
@@ -23,6 +23,12 @@ router.post('/users/update', usersController.updateUser);
 
 
 // Vehicles
+router.get('/vehicles', vehiclesController.admGetAllVehicles);
+router.get('/vehicles/create', vehiclesController.buildCreateCar);
+router.get('/vehicles/:vehicleId', vehiclesController.admGetCar);
+
+router.post('/vehicles/newCar', vehiclesController.createNewCar);
+router.post('/vehicles/update', vehiclesController.updateCar);
 
 
 module.exports = router;

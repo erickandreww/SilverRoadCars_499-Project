@@ -1,0 +1,91 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <% if (error.msg !== "Invalid value") { %>
+        <li><%= error.msg %></li>
+      <% } %>
+    <% }) %>
+  </ul>
+<% } %>
+
+<section class="admin-section">
+  <h2>Add New Vehicle</h2>
+
+  <form name="addNewCar" class="addCar" id="addCar-form" action="/admin/vehicles/newCar" method="post">
+    <fieldset>
+      <label for="brand">Brand
+        <input type="text" id="brand" name="brand" required value="<%= locals.brand || '' %>">
+      </label>
+
+      <label for="model">Model
+        <input type="text" id="model" name="model" required value="<%= locals.model || '' %>">
+      </label>
+
+      <label for="plate">Plate
+        <input type="text" id="plate" name="plate" required value="<%= locals.plate || '' %>">
+      </label>
+
+      <label for="year">Year
+        <input type="number" id="year" name="year" required value="<%= locals.year || '' %>">
+      </label>
+
+      <label for="imageUrl">Image URL
+        <input type="text" id="imageUrl" name="imageUrl" value="<%= locals.imageUrl || '' %>">
+      </label>
+
+      <label for="color">Color
+        <input type="text" id="color" name="color" value="<%= locals.color || '' %>">
+      </label>
+
+      <label for="category">Category
+        <input type="text" id="category" name="category" placeholder="SUV, Sedan, Hatchback" value="<%= locals.category || '' %>">
+      </label>
+
+      <label for="transmission">Transmission
+        <select id="transmission" name="transmission" required>
+          <option value="">Choose transmission</option>
+          <option value="automatic" <%= locals.transmission === "automatic" ? "selected" : "" %>>Automatic</option>
+          <option value="manual" <%= locals.transmission === "manual" ? "selected" : "" %>>Manual</option>
+        </select>
+      </label>
+
+      <label for="fuelType">Fuel Type
+        <input type="text" id="fuelType" name="fuelType" placeholder="Gas, Hybrid, Electric" value="<%= locals.fuelType || '' %>">
+      </label>
+
+      <label for="seats">Seats
+        <input type="number" id="seats" name="seats" min="1" value="<%= locals.seats || '' %>">
+      </label>
+
+      <label for="mileage">Mileage
+        <input type="number" id="mileage" name="mileage" min="0" value="<%= locals.mileage || 0 %>">
+      </label>
+
+      <label for="dailyPrice">Daily Price
+        <input type="number" id="dailyPrice" name="dailyPrice" min="0" step="0.01" required value="<%= locals.dailyPrice || '' %>">
+      </label>
+
+      <label for="availabilityStatus">Availability Status
+        <select id="availabilityStatus" name="availabilityStatus" required>
+          <option value="available" <%= locals.availabilityStatus === "available" ? "selected" : "" %>>Available</option>
+          <option value="reserved" <%= locals.availabilityStatus === "reserved" ? "selected" : "" %>>Reserved</option>
+          <option value="rented" <%= locals.availabilityStatus === "rented" ? "selected" : "" %>>Rented</option>
+          <option value="maintenance" <%= locals.availabilityStatus === "maintenance" ? "selected" : "" %>>Maintenance</option>
+        </select>
+      </label>
+
+      <label for="maintenanceStatus">Maintenance Status
+        <select id="maintenanceStatus" name="maintenanceStatus" required>
+          <option value="false" <%= locals.maintenanceStatus === false || locals.maintenanceStatus === "false" ? "selected" : "" %>>No Maintenance</option>
+          <option value="true" <%= locals.maintenanceStatus === true || locals.maintenanceStatus === "true" ? "selected" : "" %>>In Maintenance</option>
+        </select>
+      </label>
+
+      <button type="submit">Create Vehicle</button>
+    </fieldset>
+  </form>
+</section>

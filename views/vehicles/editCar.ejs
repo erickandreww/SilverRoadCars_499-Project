@@ -1,0 +1,83 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<section class="admin-section">
+  <h2>Edit Vehicle</h2>
+
+  <form name="editCar" class="editCar" id="editCar-form" action="/admin/vehicles/update" method="post">
+    <input type="hidden" name="vehicleId" value="<%= vehicleId %>">
+
+    <fieldset>
+      <label for="brand">Brand
+        <input type="text" id="brand" name="brand" required value="<%= brand || '' %>">
+      </label>
+
+      <label for="model">Model
+        <input type="text" id="model" name="model" required value="<%= model || '' %>">
+      </label>
+
+      <label for="plate">Plate
+        <input type="text" id="plate" name="plate" required value="<%= plate || '' %>">
+      </label>
+
+      <label for="year">Year
+        <input type="number" id="year" name="year" required value="<%= year || '' %>">
+      </label>
+
+      <label for="imageUrl">Image URL
+        <input type="text" id="imageUrl" name="imageUrl" value="<%= imageUrl || '' %>">
+      </label>
+
+      <label for="color">Color
+        <input type="text" id="color" name="color" value="<%= color || '' %>">
+      </label>
+
+      <label for="category">Category
+        <input type="text" id="category" name="category" value="<%= category || '' %>">
+      </label>
+
+      <label for="transmission">Transmission
+        <select id="transmission" name="transmission" required>
+          <option value="">Choose transmission</option>
+          <option value="automatic" <%= transmission === "automatic" ? "selected" : "" %>>Automatic</option>
+          <option value="manual" <%= transmission === "manual" ? "selected" : "" %>>Manual</option>
+        </select>
+      </label>
+
+      <label for="fuelType">Fuel Type
+        <input type="text" id="fuelType" name="fuelType" value="<%= fuelType || '' %>">
+      </label>
+
+      <label for="seats">Seats
+        <input type="number" id="seats" name="seats" min="1" value="<%= seats || '' %>">
+      </label>
+
+      <label for="mileage">Mileage
+        <input type="number" id="mileage" name="mileage" min="0" value="<%= mileage || 0 %>">
+      </label>
+
+      <label for="dailyPrice">Daily Price
+        <input type="number" id="dailyPrice" name="dailyPrice" min="0" step="0.01" required value="<%= dailyPrice || '' %>">
+      </label>
+
+      <label for="availabilityStatus">Availability Status
+        <select id="availabilityStatus" name="availabilityStatus" required>
+          <option value="available" <%= availabilityStatus === "available" ? "selected" : "" %>>Available</option>
+          <option value="reserved" <%= availabilityStatus === "reserved" ? "selected" : "" %>>Reserved</option>
+          <option value="rented" <%= availabilityStatus === "rented" ? "selected" : "" %>>Rented</option>
+          <option value="maintenance" <%= availabilityStatus === "maintenance" ? "selected" : "" %>>Maintenance</option>
+        </select>
+      </label>
+
+      <label for="maintenanceStatus">Maintenance Status
+        <select id="maintenanceStatus" name="maintenanceStatus" required>
+          <option value="false" <%= maintenanceStatus === false || maintenanceStatus === "false" ? "selected" : "" %>>No Maintenance</option>
+          <option value="true" <%= maintenanceStatus === true || maintenanceStatus === "true" ? "selected" : "" %>>In Maintenance</option>
+        </select>
+      </label>
+
+      <button type="submit">Update Vehicle</button>
+    </fieldset>
+  </form>
+</section>
