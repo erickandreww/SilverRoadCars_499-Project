@@ -163,4 +163,24 @@ const updateCar = async (req, res, next) => {
     }
 }
 
-module.exports = {getAllVehicles, getCar, admGetAllVehicles, admGetCar, buildCreateCar, createNewCar, updateCar}
+const deleteCar = async (req, res, next) => {
+  const { vehicleId } = req.body;
+  try {
+    const deleteResult = await vehiclesModel.deleteCar(vehicleId);
+
+    if(!deleteResult) {
+      const err = new Error("Car not found!")
+      err.status = 404;
+      return next(err)
+    }
+
+    return res.redirect("/admin/vehicles")
+
+  } catch (err) {
+    console.error(`Error deleting car with ID ${vehicleId}:`, err);
+    err.status = 505;
+    return next(err);
+  }
+}
+
+module.exports = {getAllVehicles, getCar, admGetAllVehicles, admGetCar, buildCreateCar, createNewCar, updateCar, deleteCar}
