@@ -13,9 +13,15 @@ const getAllUsers = async (req,res, next) => {
 
 const getUserAdm = async (req,res, next) => {
   const user_Id = req.params.userId
-  const data = await usersModel.getUserById(user_Id)
-  
-  if (data) {
+  try {
+    const data = await usersModel.getUserById(user_Id)
+
+    if(!data) {
+      const err = new Error("User not found");
+      err.status = 404;
+      return next(err)
+    }
+    
     res.render("users/user", {
       title: "Edit User",
       userId: data.userId,
@@ -24,8 +30,10 @@ const getUserAdm = async (req,res, next) => {
       userPassword: data.userPassword,
       userRole: data.userRole,
     })
-  } else {
-    res.redirect("/admin/users")
+  } catch (err) {
+    console.error(`error fetching user with ID ${user_Id}:`, err);
+    err.status = 400;
+    next(err);
   }
 }
 
@@ -84,4 +92,25 @@ const updateUser = async (req, res, next) => {
   }
 }
 
-module.exports = { getAllUsers, getUserAdm, updateUser, buildCreateUser, createNewUser }
+const deleteUser = async (req, res, next) => {
+  const { userId } = req.body;
+
+  try {
+    const deleteResult = await usersModel.deleteUser(userId);
+
+    if (!deleteResult) {
+      const err = new Error("User not found");
+      err.status = 404;
+      return next(err);
+    }
+
+    return res.redirect("/admin/users");
+
+  } catch (err) {
+    console.error(`Error deleting user with ID ${userId}:`, err);
+    err.status = 500;
+    return next(err);
+  }
+};
+
+module.exports = { getAllUsers, getUserAdm, updateUser, buildCreateUser, createNewUser, deleteUser }

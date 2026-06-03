@@ -48,6 +48,13 @@ async function createNewUser(userName, userEmail, userPassword, userRole) {
   return result.rows[0];
 }
 
+async function deleteUser(userId) {
+  const sql = `DELETE FROM "Users" WHERE "userId" = $1 RETURNING *`;
+
+  const result = await pool.query(sql, [userId]);
+  return result.rows[0];
+}
+
 async function createUser(userName, userEmail, hashedPassword) {
   const userId = crypto.randomUUID();
   const query = `
@@ -59,4 +66,4 @@ async function createUser(userName, userEmail, hashedPassword) {
   return result.rows[0];
 }
 
-module.exports = { getAllUsers, getUserById, getUserByEmail, createUser, createNewUser, updateUser }
+module.exports = { getAllUsers, getUserById, getUserByEmail, createUser, createNewUser, updateUser, deleteUser }
