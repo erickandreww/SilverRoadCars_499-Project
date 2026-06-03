@@ -1,38 +1,36 @@
 const bcrypt = require('bcryptjs');
-const usersModel = require('../models/users');
+const clientModel = require('../models/clients');
 
 const registerView = (req, res) => {
   res.render('register', { title: 'Register', error: null });
 };
 
-const registerUser = async (req, res, next) => {
-  const { userName, userEmail, userPassword, confirmPassword } = req.body;
+const registerClient = async (req, res, next) => {
+  const { clientName, clientEmail, clientPassword, confirmPassword, clientAddress, clientPhone, driverLicenseNumber } = req.body;
 
-  if (!userName || !userEmail || !userPassword || !confirmPassword) {
+  if (!clientName || !clientEmail || !clientPassword || !confirmPassword || !clientAddress || !clientPhone || !driverLicenseNumber) {
     return res.render('register', { title: 'Register', error: 'All fields are required' });
   }
 
-  if (userPassword !== confirmPassword) {
+  if (clientPassword !== confirmPassword) {
     return res.render('register', { title: 'Register', error: 'Passwords do not match' });
   }
 
-  if (userPassword.length < 6) {
-    return res.render('register', { title: 'Register', error: 'Password must be at least 6 characters' });
-  }
+  const hashPassword = await bcrypt.hash(clientPassword, 10);
 
   try {
-    const existing = await usersModel.getUserByEmail(userEmail);
+    const existing = await clientModel.getClientByEmail(clientEmail);
     if (existing) {
-      return res.render('register', { title: 'Register', error: 'An account with that email already exists' });
+      return res.render('register', { title: 'Register', error: 'A client with that email already exists' });
     }
-
-    const hashedPassword = await bcrypt.hash(userPassword, 10);
-    await usersModel.createUser(userName, userEmail, hashedPassword);
-
+    const result = await clientModel.createClient(clientName, clientEmail, hashPassword, clientAddress, clientPhone, driverLicenseNumber);
+    if (!result) {
+      return res.render('register', { title: 'Register', error: 'Failed to create client' });
+    }
     res.redirect('/login');
   } catch (err) {
     next(err);
   }
 };
 
-module.exports = { registerView, registerUser };
+module.exports = { registerView, registerClient };

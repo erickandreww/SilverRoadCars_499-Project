@@ -25,7 +25,7 @@ passport.use(new googleStrategy({
             if (!client.googleId) {
                 const updateGoogleId = await db.query(
                     'UPDATE "Clients" SET "googleId" = $1, "clientAvatar" = $2 WHERE "clientId" = $3 RETURNING *', 
-                    [google_Id, avatar, client.clientId] // Fixed user.id -> client.clientId
+                    [google_Id, avatar, client.clientId]
                 );
                 client = updateGoogleId.rows[0];
             }
@@ -34,7 +34,6 @@ passport.use(new googleStrategy({
 
         const newClientId = 'cli_' + Date.now(); 
 
-        // Notice the quotes around "googleId" and "clientAvatar"
         const newClient = await db.query(
             'INSERT INTO "Clients" ("clientId", "googleId", "clientName", "clientEmail", "clientAvatar") VALUES ($1, $2, $3, $4, $5) RETURNING *', 
             [newClientId, google_Id, name, email, avatar]

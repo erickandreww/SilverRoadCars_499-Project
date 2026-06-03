@@ -225,4 +225,29 @@ body header nav ul.open {
   text-decoration: underline;
 }
 
+.auth-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-secondary {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #319CC6;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-family: "Boogaloo", cursive;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #b0b0b0;
+}
+
+
 /*# sourceMappingURL=styles.css.map */

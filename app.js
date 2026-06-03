@@ -37,7 +37,7 @@ app.use(passport.session());
 
 // Make session user available in all EJS views
 app.use((req, res, next) => {
-  res.locals.sessionUser = req.user || req.session.user || null;
+  res.locals.sessionUser = req.user || req.session.user || req.session.client || null;
   next();
 });
 
