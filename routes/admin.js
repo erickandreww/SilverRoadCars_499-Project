@@ -20,6 +20,7 @@ router.get('/users/:userId', usersController.getUserAdm);
 
 router.post('/users/newUser', usersController.createNewUser);
 router.post('/users/update', usersController.updateUser);
+router.post('/users/delete', usersController.deleteUser);
 
 
 // Vehicles
@@ -29,6 +30,7 @@ router.get('/vehicles/:vehicleId', vehiclesController.admGetCar);
 
 router.post('/vehicles/newCar', vehiclesController.createNewCar);
 router.post('/vehicles/update', vehiclesController.updateCar);
+router.post('/vehicles/delete', vehiclesController.deleteCar);
 
 
 module.exports = router;

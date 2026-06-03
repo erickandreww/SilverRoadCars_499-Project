@@ -58,4 +58,12 @@ async function updateCar(vehicleId, brand, model, plate, year,
   return result.rows[0];
 }
 
-module.exports = {getAllVehicles, getCar, newCar, updateCar}
+async function deleteCar(vehicleId) {
+  const sql = `DELETE FROM "Vehicles" WHERE "vehicleId" = $1 RETURNING *;`;
+  
+  const result = await pool.query(sql, [vehicleId]);
+
+  return result.rows[0]
+}
+
+module.exports = {getAllVehicles, getCar, newCar, updateCar, deleteCar}
