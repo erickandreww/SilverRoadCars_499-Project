@@ -1,0 +1,29 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<section class="admin-dashboard">
+  <p class="dashboard-intro">
+    Welcome to the SilverRoadCars admin dashboard. Choose one of the options below to manage the system.
+  </p>
+
+  <div class="dashboard-cards">
+
+    <a href="/admin/users" class="dashboard-card">
+      <h2>Users Management</h2>
+      <p>
+        View, create, edit, and delete internal users. Manage staff access and user roles.
+      </p>
+      <span>Manage Users</span>
+    </a>
+
+    <a href="/admin/vehicles" class="dashboard-card">
+      <h2>Vehicles Management</h2>
+      <p>
+        View, create, edit, and delete vehicles. Manage vehicle information, prices, and availability.
+      </p>
+      <span>Manage Vehicles</span>
+    </a>
+
+  </div>
+</section>
