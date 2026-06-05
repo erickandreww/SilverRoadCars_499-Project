@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+const jwt = require('jsonwebtoken'); 
 var db = require('./config/db');
 require('dotenv').config();
 const passport = require('passport');
@@ -37,16 +38,38 @@ app.use(passport.session());
 
 // Make session user available in all EJS views
 app.use((req, res, next) => {
-  res.locals.sessionUser = req.user || req.session.user || req.session.client || null;
+  // 1. Check Passport session or manual user session first
+  let userPayload = req.user || req.session.user || req.session.client || null;
+
+  // 2. If neither exists, check for a valid client JWT cookie
+  if (!userPayload && req.cookies && req.cookies.token) {
+    try {
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      userPayload = decoded; // Contains clientId, clientName, clientEmail, role
+    } catch (e) {
+      // If the token is corrupted or expired, wipe it silently
+      res.clearCookie('token');
+    }
+  }
+  res.locals.sessionUser = userPayload;
   next();
 });
 
 app.use('/', indexRouter);
 
 // Logout
-app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login');
+app.get('/logout', (req, res, next) => {
+  // 1. Clear the client JWT cookie
+  res.clearCookie('token');
+
+  // 2. Clear Passport session logs
+  req.logout((err) => {
+    if (err) { return next(err); }
+    
+    // 3. Clear manual express-session state
+    req.session.destroy(() => {
+      res.redirect('/login');
+    });
   });
 });
 
