@@ -5,7 +5,7 @@ Util.getUsersGrid = async function(data) {
   let grid = "";
   grid = '<a href="/admin/users/create">Create User</a>';
   if (data && data.length > 0) {
-    grid += '<ul id="inv-display">';
+    grid += '<ul id="users-display">';
     data.forEach(user => {
       grid += `<li> ${user.userName}, ${user.userEmail}, ${user.userPassword}, ${user.userRole}, ${user.userId} </li> 
       <a href="/admin/users/${user.userId}">Edit</a>`;
@@ -21,7 +21,7 @@ Util.getUsersGrid = async function(data) {
 Util.getVehiclesGrid = async function (data) {
   let grid = "";
   if (data && data.length > 0){
-    grid = '<ul id="inv-display">';
+    grid = '<ul id="vehicles-display">';
     data.forEach(vehicle=>{
       grid += `<li>vehicle: ${vehicle.vehicleId} ${vehicle.brand} ${vehicle.model} ${vehicle.year} ${vehicle.dailyPrice} </li>`
     })
@@ -37,7 +37,7 @@ Util.admGetVehiclesGrid = async function (data) {
   let grid = "";
   grid = '<a href="/admin/vehicles/create">Create Car</a>';
   if (data && data.length > 0){
-    grid += '<ul id="inv-display">';
+    grid += '<ul id="vehicles-display">';
     data.forEach(vehicle=>{
       grid += `<li>vehicle: ${vehicle.vehicleId} ${vehicle.brand} ${vehicle.model} ${vehicle.year} ${vehicle.dailyPrice} </li>
       <a href="/admin/vehicles/${vehicle.vehicleId}">Edit</a>`
