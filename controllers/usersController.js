@@ -1,5 +1,6 @@
 const usersModel = require("../models/users")
 const utilities = require("../utilities/index")
+const bcrypt = require('bcryptjs');
 
 const getAllUsers = async (req,res, next) => {
   // const user_Id = req.params.userId
@@ -47,8 +48,11 @@ const buildCreateUser = async (req, res, next) => {
 const createNewUser = async (req, res, next) => {
   try {
     const {userName, userEmail, userPassword, userRole} = req.body;
+    
+    const hashedPassword = await bcrypt.hash(userPassword, 10);
+
     const userResult = await usersModel.createNewUser(
-      userName, userEmail, userPassword, userRole
+      userName, userEmail, hashedPassword, userRole
     );
 
     if (userResult) {
@@ -69,26 +73,34 @@ const createNewUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-  const {userId, userName, userEmail, userPassword, userRole} = req.body;
-  const updateResult = await usersModel.updateUser(
-    userId, userName, userEmail, userPassword, userRole
-  );
-  
-  if (updateResult) {
-    res.redirect("/admin/users")
-  } else {
+    const {userId, userName, userEmail, userPassword, userRole} = req.body;
+
+    let hashedPassword = null;
+
+    if (userPassword && userPassword.trim() !== "") {
+      hashedPassword = await bcrypt.hash(userPassword, 10);
+    }
+
+    const updateResult = await usersModel.updateUser(
+      userId, userName, userEmail, hashedPassword, userRole
+    );
+    
+    if (updateResult) {
+      res.redirect("/admin/users")
+    } 
+    
     res.status(500).render("users/user", {
       title: "Edit User ",
       userId,
       userName,
       userEmail,
-      userPassword,
       userRole,
     })
-  }
+
   } catch(error) {
-    console.error(error)
-    res.status(500).send("Update failed")
+    console.error("Update user error:", err);
+    err.status = 500;
+    next(err);
   }
 }
 

@@ -20,19 +20,34 @@ async function getAllUsers() {
 }
 
 async function updateUser(userId, userName, userEmail, userPassword,userRole) {
-  const sql = `
+  let sql;
+  let values;
+
+  if (userPassword) {
+    sql = `
     UPDATE "Users"
     SET
       "userName" = $1, "userEmail" = $2, "userPassword" = $3, 
       "userRole" = $4,"updatedAt" = NOW()
     WHERE "userId" = $5
-    RETURNING *`
+    RETURNING *;`;
 
-  const result = await pool.query(sql, [
-    userName, userEmail, userPassword, userRole, userId
-  ])
+    values = [userName, userEmail, userPassword, userRole, userId];
+  } else {
+    sql = `
+    UPDATE "Users"
+    SET
+      "userName" = $1, "userEmail" = $2, 
+      "userRole" = $3,"updatedAt" = NOW()
+    WHERE "userId" = $4
+    RETURNING *;`;
 
-  return result.rows[0]
+    values = [userName, userEmail, userRole, userId];
+  }
+  
+  const result = await pool.query(sql, values);
+
+  return result.rows[0];
 }
 
 async function createNewUser(userName, userEmail, userPassword, userRole) {
