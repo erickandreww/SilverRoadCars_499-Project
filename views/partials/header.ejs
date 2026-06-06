@@ -13,7 +13,7 @@
           <% if (sessionUser.clientAvatar) { %>
             <img src="<%= sessionUser.clientAvatar %>" alt="Profile" class="nav-avatar" width="25" height="25" style="border-radius: 50%; vertical-align: middle; margin-right: 5px;">
           <% } %>
-          <span>Hello, <%= sessionUser.clientName %></span>
+          <span>Hello, <%= sessionUser.clientName || sessionUser.userName %></span>
         </li>
         <li><a href="/auth/logout">Logout</a></li>
       <% } else { %>
