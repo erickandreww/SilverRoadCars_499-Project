@@ -25,6 +25,7 @@ const getUserAdm = async (req,res, next) => {
     
     res.render("users/user", {
       title: "Edit User",
+      errors: null,
       userId: data.userId,
       userName: data.userName,
       userEmail: data.userEmail,

@@ -2,6 +2,14 @@
   <h1><%= title %></h1>
 <% } %>
 
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
 <section class="admin-section">
   <h2>Edit Vehicle</h2>
 
@@ -50,11 +58,11 @@
       </label>
 
       <label for="seats">Seats
-        <input type="number" id="seats" name="seats" min="1" value="<%= seats || '' %>">
+        <input type="number" id="seats" name="seats" min="1" required value="<%= seats || '' %>">
       </label>
 
       <label for="mileage">Mileage
-        <input type="number" id="mileage" name="mileage" min="0" value="<%= mileage || 0 %>">
+        <input type="number" id="mileage" name="mileage" min="0" required value="<%= mileage || 0 %>">
       </label>
 
       <label for="dailyPrice">Daily Price

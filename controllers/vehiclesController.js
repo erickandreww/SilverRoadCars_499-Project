@@ -56,6 +56,7 @@ const admGetCar = async (req,res, next) => {
   if (data) {
     res.render("vehicles/editCar", {
       title: "Edit Car",
+      errors: null,
       vehicleId: data.vehicleId,
       brand: data.brand,
       model: data.model,
