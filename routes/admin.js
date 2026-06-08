@@ -4,13 +4,12 @@ var router = express.Router();
 const usersController = require('../controllers/usersController')
 const vehiclesController = require('../controllers/vehiclesController')
 
-const { requireUser, requireManager} = require("../middleware/middleware")
 const userValidation = require('../utilities/userValidation')
 const vehicleValidation = require('../utilities/vehiclesValidation')
 
 
 /* GET users listing. */
-router.get('/', requireUser, function(req, res, next) {
+router.get('/', function(req, res, next) {
   res.render('admin/dashboard', {
     title: 'Admin Dashboard'
   });
@@ -18,13 +17,12 @@ router.get('/', requireUser, function(req, res, next) {
 
 
 // Users
-router.get('/users', requireManager, usersController.getAllUsers);
-router.get('/users/create', requireManager, usersController.buildCreateUser);
-router.get('/users/:userId', requireManager, usersController.getUserAdm);
+router.get('/users', usersController.getAllUsers);
+router.get('/users/create', usersController.buildCreateUser);
+router.get('/users/:userId', usersController.getUserAdm);
 
 router.post(
   '/users/newUser', 
-  requireManager, 
   userValidation.userRules(), 
   userValidation.checkUserData, 
   usersController.createNewUser
@@ -32,23 +30,21 @@ router.post(
 
 router.post(
 '/users/update', 
-  requireManager, 
   userValidation.userRules(), 
   userValidation.checkUpdateUserData,
   usersController.updateUser
 );
 
-router.post('/users/delete', requireManager, usersController.deleteUser);
+router.post('/users/delete', usersController.deleteUser);
 
 
 // Vehicles
-router.get('/vehicles', requireManager, vehiclesController.admGetAllVehicles);
-router.get('/vehicles/create', requireManager, vehiclesController.buildCreateCar);
-router.get('/vehicles/:vehicleId', requireManager, vehiclesController.admGetCar);
+router.get('/vehicles', vehiclesController.admGetAllVehicles);
+router.get('/vehicles/create', vehiclesController.buildCreateCar);
+router.get('/vehicles/:vehicleId', vehiclesController.admGetCar);
 
 router.post(
   '/vehicles/newCar', 
-  requireManager, 
   vehicleValidation.vehicleRules(),
   vehicleValidation.checkVehicleData,
   vehiclesController.createNewCar
@@ -56,13 +52,12 @@ router.post(
 
 router.post(
   '/vehicles/update', 
-  requireManager, 
   vehicleValidation.vehicleRules(),
   vehicleValidation.checkUpdateVehicleData,
   vehiclesController.updateCar
 );
 
-router.post('/vehicles/delete', requireManager, vehiclesController.deleteCar);
+router.post('/vehicles/delete', vehiclesController.deleteCar);
 
 
 module.exports = router;
