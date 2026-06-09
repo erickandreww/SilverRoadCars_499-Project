@@ -1,9 +1,51 @@
 <% if (title) { %>
-    <h1><%= title %></h1>
-    <% } else {
-    res.redirect('/')
-} %>
+  <h1><%= title %></h1>
+<% } %>
 
-<%# messages() %>
+<section class="admin-section admin-list-section">
+  <div class="section-header">
+    <h2>Vehicles Management</h2>
 
-<%- grid %>
+    <a href="/admin/vehicles/create" class="btn-primary">
+      Create Vehicle
+    </a>
+  </div>
+
+  <% if (vehicles && vehicles.length > 0) { %>
+    <table class="admin-table vehicles-table">
+      <thead>
+        <tr>
+          <th>Vehicle</th>
+          <th>Plate</th>
+          <th>Year</th>
+          <th>Price / Day</th>
+          <th>Status</th>
+          <th>Maintenance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% vehicles.forEach(vehicle => { %>
+          <tr>
+            <td><%= vehicle.brand %> <%= vehicle.model %></td>
+            <td><%= vehicle.plate %></td>
+            <td><%= vehicle.year %></td>
+            <td>$<%= vehicle.dailyPrice %></td>
+            <td><%= vehicle.availabilityStatus %></td>
+            <td><%= vehicle.maintenanceStatus ? "Yes" : "No" %></td>
+            <td>
+              <a href="/admin/vehicles/<%= vehicle.vehicleId %>" class="table-action">
+                Edit
+              </a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p class="notice">No vehicles were found.</p>
+  <% } %>
+
+  <a href="/admin" class="return-link">Return to Dashboard</a>
+</section>

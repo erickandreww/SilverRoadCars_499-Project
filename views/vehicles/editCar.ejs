@@ -11,7 +11,7 @@
 <% } %>
 
 <section class="admin-section">
-  <h2>Edit Vehicle</h2>
+  <h2>Vehicle Information</h2>
 
   <form name="editCar" class="editCar" id="editCar-form" action="/admin/vehicles/update" method="post">
     <input type="hidden" name="vehicleId" value="<%= vehicleId %>">
@@ -88,11 +88,12 @@
       <button type="submit">Update Vehicle</button>
     </fieldset>
   </form>
-  <form action="/admin/vehicles/delete" method="post">
+  <form class="delete-form" action="/admin/vehicles/delete" method="post">
     <input type="hidden" name="vehicleId" value="<%= vehicleId %>">
 
     <button
       type="submit"
+      class="btn-danger"
       onclick="return confirm('Are you sure you want to delete this vehicle?')"
     >
       Delete Vehicle

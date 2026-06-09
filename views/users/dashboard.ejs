@@ -1,0 +1,47 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<section class="users-dashboard">
+  <p class="dashboard-intro">
+    Welcome to the SilverRoadCars staff dashboard. Choose one of the options below to manage daily operations.
+  </p>
+
+  <div class="dashboard-cards">
+
+    <a href="/users/bookings" class="dashboard-card">
+      <h2>Booking Management</h2>
+      <p>
+        View current bookings, manage rental records, and track active reservations.
+      </p>
+      <span>Manage Bookings</span>
+    </a>
+
+    <a href="/users/bookings/requests" class="dashboard-card">
+      <h2>Rent Requests</h2>
+      <p>
+        Review client rental requests and approve or reject pending reservations.
+      </p>
+      <span>View Requests</span>
+    </a>
+
+    <a href="/users/maintenance" class="dashboard-card">
+      <h2>Maintenance</h2>
+      <p>
+        View, create, and update vehicle maintenance records.
+      </p>
+      <span>Manage Maintenance</span>
+    </a>
+
+    <% if (sessionUser && sessionUser.userRole === "manager") { %>
+      <a href="/admin" class="dashboard-card">
+        <h2>Admin Dashboard</h2>
+        <p>
+          Access manager-only tools for users and vehicles management.
+        </p>
+        <span>Open Admin</span>
+      </a>
+    <% } %>
+
+  </div>
+</section>

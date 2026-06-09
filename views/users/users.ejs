@@ -1,9 +1,49 @@
 <% if (title) { %>
-    <h1><%= title %></h1>
-    <% } else {
-    res.redirect('/')
-} %>
+  <h1><%= title %></h1>
+<% } %>
 
-<%# messages() %>
+<section class="admin-section admin-list-section">
+  <div class="section-header">
+    <h2>Users Management</h2>
 
-<%- grid %>
+    <a href="/admin/users/create" class="btn-primary">
+      Create User
+    </a>
+  </div>
+
+  <% if (users && users.length > 0) { %>
+    <table class="admin-table users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% users.forEach(user => { %>
+          <tr>
+            <td><%= user.userName %></td>
+            <td><%= user.userEmail %></td>
+            <td><%= user.userRole %></td>
+            <td>
+              <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A" %>
+            </td>
+            <td>
+              <a href="/admin/users/<%= user.userId %>" class="table-action">
+                Edit
+              </a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p class="notice">No users were found.</p>
+  <% } %>
+
+  <a href="/admin" class="return-link">Return to Dashboard</a>
+</section>
