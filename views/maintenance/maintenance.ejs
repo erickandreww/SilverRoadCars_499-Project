@@ -1,0 +1,42 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<section class="maintenance-section">
+  <a href="/users/maintenance/create" class="btn-primary">Add Maintenance Record</a>
+
+  <% if (data && data.length > 0) { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Vehicle</th>
+          <th>Plate</th>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Cost</th>
+          <th>Status</th>
+          <th>Created By</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% data.forEach(maintenance => { %>
+          <tr>
+            <td><%= maintenance.brand %> <%= maintenance.model %></td>
+            <td><%= maintenance.plate %></td>
+            <td><%= maintenance.maintenanceType || "N/A" %></td>
+            <td><%= maintenance.maintenanceDate ? new Date(maintenance.maintenanceDate).toLocaleDateString() : "N/A" %></td>
+            <td>$<%= maintenance.cost || "0.00" %></td>
+            <td><%= maintenance.status %></td>
+            <td><%= maintenance.createdByName || "N/A" %></td>
+            <td>
+              <a href="/users/maintenance/<%= maintenance.maintenanceId %>">Edit</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p class="notice">No maintenance records found.</p>
+  <% } %>

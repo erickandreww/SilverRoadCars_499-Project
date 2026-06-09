@@ -1,0 +1,97 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <% if (error.msg !== "Invalid value") { %>
+        <li><%= error.msg %></li>
+      <% } %>
+    <% }) %>
+  </ul>
+<% } %>
+
+<section class="maintenance-section">
+  <h2>Maintenance Information</h2>
+
+  <form
+    name="addMaintenance"
+    class="maintenance-form"
+    id="maintenance-form"
+    action="/users/maintenance/create"
+    method="post"
+  >
+    <fieldset>
+      <label for="vehicleId">Vehicle
+        <select id="vehicleId" name="vehicleId" required>
+          <option value="">Choose a vehicle</option>
+
+          <% if (vehicles && vehicles.length > 0) { %>
+            <% vehicles.forEach(vehicle => { %>
+              <option
+                value="<%= vehicle.vehicleId %>"
+                <%= locals.vehicleId === vehicle.vehicleId ? "selected" : "" %>
+              >
+                <%= vehicle.brand %> <%= vehicle.model %> - <%= vehicle.plate %>
+              </option>
+            <% }) %>
+          <% } %>
+        </select>
+      </label>
+
+      <label for="maintenanceType">Maintenance Type
+        <input
+          type="text"
+          id="maintenanceType"
+          name="maintenanceType"
+          placeholder="Oil change, tire replacement, inspection..."
+          value="<%= locals.maintenanceType || '' %>"
+          required
+        >
+      </label>
+
+      <label for="description">Description
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          placeholder="Describe the maintenance details"
+        ><%= locals.description || '' %></textarea>
+      </label>
+
+      <label for="maintenanceDate">Maintenance Date
+        <input
+          type="datetime-local"
+          id="maintenanceDate"
+          name="maintenanceDate"
+          value="<%= locals.maintenanceDate || '' %>"
+          required
+        >
+      </label>
+
+      <label for="cost">Cost
+        <input
+          type="number"
+          id="cost"
+          name="cost"
+          min="0"
+          step="0.01"
+          placeholder="0.00"
+          value="<%= locals.cost || '' %>"
+        >
+      </label>
+
+      <label for="status">Status
+        <select id="status" name="status" required>
+          <option value="">Choose status</option>
+          <option value="scheduled" <%= locals.status === "scheduled" ? "selected" : "" %>>Scheduled</option>
+          <option value="inProgress" <%= locals.status === "inProgress" ? "selected" : "" %>>In Progress</option>
+          <option value="completed" <%= locals.status === "completed" ? "selected" : "" %>>Completed</option>
+        </select>
+      </label>
+
+      <button type="submit">Create Maintenance Record</button>
+    </fieldset>
+  </form>
+</section>
