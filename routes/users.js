@@ -1,14 +1,26 @@
 var express = require('express');
 var router = express.Router();
-const controller = require("../controllers/usersController")
+
+const maintenanceController = require("../controllers/maintenanceController")
 
 /* All Users Routes. */
 // router.get('/bookings', )
 // router.get('/bookings/requests', )
-// router.get('/maintenance', )
-// router.get('/maintenance/:carId', )
 
 /* GET users listing. */
-router.get('/', controller.getAllUsers);
+router.get('/', function(req, res, next) {
+  res.render('users/dashboard', {
+    title: 'User Dashboard'
+  });
+});
+
+// Maintenance
+router.get('/maintenance', maintenanceController.getAllMaintenances);
+router.get('/maintenance/create', maintenanceController.buildCreateMaintenance);
+router.get('/maintenance/:maintenanceId', maintenanceController.getMaintenance);
+
+router.post('/maintenance/new', maintenanceController.createMaintenance);
+router.post('/maintenance/update', maintenanceController.updateMaintenance);
+router.post('/maintenance/delete', maintenanceController.deleteMaintenance);
 
 module.exports = router;

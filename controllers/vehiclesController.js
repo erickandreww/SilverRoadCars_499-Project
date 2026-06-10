@@ -15,17 +15,17 @@ const getAllVehicles = async (req, res, next) => {
 }
 
 const admGetAllVehicles = async (req, res, next) => {
-    try {
-    const data =await vehiclesModel.getAllVehicles();
-    const grid =await utilities.admGetVehiclesGrid(data);
+  try {
+    const vehicles = await vehiclesModel.getAllVehicles();
+
     res.render("vehicles/admVehicles", {
-        title: "Vehicles",
-        grid,
-    })
-    } catch (err) {
-        next(err);
-    }
-}
+      title: "Vehicles",
+      vehicles
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 const getCar = async (req, res, next) => {
     const carId = req.params.carId;
