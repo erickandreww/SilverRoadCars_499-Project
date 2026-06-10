@@ -1,0 +1,99 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<section class="admin-section admin-list-section">
+  <div class="section-header">
+    <h2>Pending Booking Requests</h2>
+
+    <a href="/users/bookings" class="btn-primary">
+      View All Bookings
+    </a>
+  </div>
+
+  <% if (data && data.length > 0) { %>
+    <table class="admin-table bookings-table">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Vehicle</th>
+          <th>Dates</th>
+          <th>Total Days</th>
+          <th>Total Value</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% data.forEach(booking => { %>
+          <tr>
+            <td>
+              <%= booking.clientName || "Unknown Client" %><br>
+              <small><%= booking.clientEmail || "" %></small>
+            </td>
+
+            <td>
+              <%= booking.brand %> <%= booking.model %><br>
+              <small>Plate: <%= booking.plate || "N/A" %></small>
+            </td>
+
+            <td>
+              <%= booking.startDate ? new Date(booking.startDate).toLocaleDateString() : "N/A" %>
+              -
+              <%= booking.endDate ? new Date(booking.endDate).toLocaleDateString() : "N/A" %>
+            </td>
+
+            <td><%= booking.totalDays || 0 %></td>
+
+            <td>
+              $<%= booking.totalValue || "0.00" %>
+            </td>
+
+            <td>
+              <span class="status-badge status-<%= booking.bookingStatus %>">
+                <%= booking.bookingStatus %>
+              </span>
+            </td>
+
+            <td class="table-actions">
+              <a href="/users/bookings/<%= booking.bookingId %>" class="table-action">
+                Details
+              </a>
+
+              <form action="/users/bookings/approve" method="post" class="inline-form">
+                <input type="hidden" name="bookingId" value="<%= booking.bookingId %>">
+                <button type="submit" class="btn-small btn-success">
+                  Approve
+                </button>
+              </form>
+
+              <form action="/users/bookings/reject" method="post" class="inline-form">
+                <input type="hidden" name="bookingId" value="<%= booking.bookingId %>">
+                <button
+                  type="submit"
+                  class="btn-small btn-danger"
+                  onclick="return confirm('Are you sure you want to reject this booking request?')"
+                >
+                  Reject
+                </button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p class="notice">No pending booking requests were found.</p>
+  <% } %>
+
+  <a href="/users" class="return-link">Return to Users Dashboard</a>
+</section>

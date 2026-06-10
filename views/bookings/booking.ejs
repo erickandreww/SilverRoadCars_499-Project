@@ -1,0 +1,177 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<section class="admin-section booking-details-section">
+  <div class="section-header">
+    <h2>Booking Information</h2>
+
+    <a href="/users/bookings" class="btn-primary">
+      View All Bookings
+    </a>
+  </div>
+
+  <% if (data) { %>
+
+    <div class="details-grid">
+
+      <div class="details-card">
+        <h3>Booking Details</h3>
+
+        <p>
+          <strong>Status:</strong>
+          <span class="status-badge status-<%= data.bookingStatus %>">
+            <%= data.bookingStatus %>
+          </span>
+        </p>
+
+        <p>
+          <strong>Start Date:</strong>
+          <%= data.startDate ? new Date(data.startDate).toLocaleDateString() : "N/A" %>
+        </p>
+
+        <p>
+          <strong>End Date:</strong>
+          <%= data.endDate ? new Date(data.endDate).toLocaleDateString() : "N/A" %>
+        </p>
+
+        <p>
+          <strong>Total Days:</strong>
+          <%= data.totalDays || 0 %>
+        </p>
+
+        <p>
+          <strong>Total Value:</strong>
+          $<%= data.totalValue || "0.00" %>
+        </p>
+
+        <p>
+          <strong>Approved By:</strong>
+          <%= data.approvedByName || "Not approved yet" %>
+        </p>
+      </div>
+
+      <div class="details-card">
+        <h3>Client Information</h3>
+
+        <p>
+          <strong>Name:</strong>
+          <%= data.clientName || "Unknown Client" %>
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          <%= data.clientEmail || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Phone:</strong>
+          <%= data.clientPhone || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Address:</strong>
+          <%= data.clientAddress || "N/A" %>
+        </p>
+      </div>
+
+      <div class="details-card">
+        <h3>Vehicle Information</h3>
+
+        <p>
+          <strong>Vehicle:</strong>
+          <%= data.brand %> <%= data.model %>
+        </p>
+
+        <p>
+          <strong>Plate:</strong>
+          <%= data.plate || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Year:</strong>
+          <%= data.year || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Color:</strong>
+          <%= data.color || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Category:</strong>
+          <%= data.category || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Transmission:</strong>
+          <%= data.transmission || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Fuel Type:</strong>
+          <%= data.fuelType || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Seats:</strong>
+          <%= data.seats || "N/A" %>
+        </p>
+
+        <p>
+          <strong>Daily Price:</strong>
+          $<%= data.dailyPrice || "0.00" %>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="booking-actions">
+      <% if (data.bookingStatus === "pending") { %>
+        <form action="/users/bookings/approve" method="post">
+          <input type="hidden" name="bookingId" value="<%= data.bookingId %>">
+          <button type="submit" class="btn-success">
+            Approve Booking
+          </button>
+        </form>
+
+        <form action="/users/bookings/reject" method="post">
+          <input type="hidden" name="bookingId" value="<%= data.bookingId %>">
+          <button
+            type="submit"
+            class="btn-danger"
+            onclick="return confirm('Are you sure you want to reject this booking?')"
+          >
+            Reject Booking
+          </button>
+        </form>
+      <% } %>
+
+      <% if (data.bookingStatus === "active") { %>
+        <form action="/users/bookings/close" method="post">
+          <input type="hidden" name="bookingId" value="<%= data.bookingId %>">
+          <button
+            type="submit"
+            class="btn-success"
+            onclick="return confirm('Are you sure you want to close this booking?')"
+          >
+            Close Booking
+          </button>
+        </form>
+      <% } %>
+    </div>
+
+  <% } else { %>
+    <p class="notice">Booking not found.</p>
+  <% } %>
+
+  <a href="/users/bookings" class="return-link">Return to Bookings</a>
+</section>
