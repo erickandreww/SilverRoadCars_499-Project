@@ -27,4 +27,15 @@ async function createClient(clientName, clientEmail, clientPassword, clientAddre
   return result.rows[0];
 }
 
-module.exports = {getAllClients, getClientById, getClientByEmail, createClient}
+async function updateClientProfile(clientId, clientName, clientEmail, clientAddress, clientPhone) {
+  const query = `
+    UPDATE "Clients"
+    SET "clientName" = $1, "clientEmail" = $2, "clientAddress" = $3, "clientPhone" = $4, "updatedAt" = NOW()
+    WHERE "clientId" = $5
+    RETURNING *
+  `;
+  const result = await pool.query(query, [clientName, clientEmail, clientAddress, clientPhone, clientId]);
+  return result.rows[0];
+}
+
+module.exports = {getAllClients, getClientById, getClientByEmail, createClient, updateClientProfile}

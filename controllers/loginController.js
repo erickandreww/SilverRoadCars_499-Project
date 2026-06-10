@@ -32,6 +32,8 @@ const loginClient = async (req, res, next) => {
       clientName: client.clientName,
       clientEmail: client.clientEmail,
       clientAvatar: client.clientAvatar,
+      clientAddress: client.clientAddress,
+      clientPhone: client.clientPhone,
       role: 'client'
     };
 

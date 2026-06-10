@@ -1,0 +1,18 @@
+<% if (typeof title !== 'undefined' && title) { %>
+  <h1><%= title %></h1>
+<% } else { %>
+  <% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+  <p class="error"><%= error %></p>
+<% } %>
+
+<section class="clientHome">
+  <h2>Welcome, <%= sessionUser.clientName || sessionUser.userName %>!</h2>
+  <p>Here you can view your profile, manage your bookings, and update your information.</p>
+  <div class="client-actions">
+    <a href="/clients/profile" class="btn-secondary">View Profile</a>
+    <a href="/clients/bookings/current" class="btn-secondary">My Bookings</a>
+    <a href="/clients/bookings/history" class="btn-secondary">Booking History</a>
+  </div>
+</section>
