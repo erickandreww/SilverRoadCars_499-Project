@@ -106,4 +106,32 @@ async function createBooking(clientId, vehicleId, startDate, endDate, totalDays,
   return result.rows[0];
 }
 
-module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, closeBooking, createBooking }
+async function getCurrentBookingsByClientId(clientId) {
+  const sql = `
+    SELECT b."bookingId", b."clientId", b."vehicleId", b."approvedBy", b."bookingStatus",
+      b."startDate", b."endDate", b."totalDays", b."totalValue", b."createdAt", b."updatedAt",
+      v."brand", v."model", v."plate", v."dailyPrice"
+    FROM "Bookings" b
+    LEFT JOIN "Vehicles" v ON b."vehicleId" = v."vehicleId"
+    WHERE b."clientId" = $1 AND b."bookingStatus" = 'approved' OR b."bookingStatus" = 'active' AND b."endDate" >= CURRENT_DATE
+    ORDER BY b."createdAt" DESC
+  `;
+  const result = await pool.query(sql, [clientId]);
+  return result.rows;
+}
+
+async function getBookingHistoryByClientId(clientId) {
+  const sql = `
+    SELECT b."bookingId", b."clientId", b."vehicleId", b."approvedBy", b."bookingStatus",
+      b."startDate", b."endDate", b."totalDays", b."totalValue", b."createdAt", b."updatedAt",
+      v."brand", v."model", v."plate", v."dailyPrice"
+    FROM "Bookings" b
+    LEFT JOIN "Vehicles" v ON b."vehicleId" = v."vehicleId"
+    WHERE b."clientId" = $1
+    ORDER BY b."createdAt" DESC
+  `;
+  const result = await pool.query(sql, [clientId]);
+  return result.rows;
+}
+
+module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, closeBooking, createBooking, getCurrentBookingsByClientId, getBookingHistoryByClientId }

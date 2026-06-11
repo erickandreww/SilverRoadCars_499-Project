@@ -9,8 +9,8 @@ const upload = multer({ dest: 'public/uploads/' });
 router.get('/profile', verifyToken, requireClient, clientsController.profileController);
 router.get('/profile/edit', verifyToken, requireClient, clientsController.editviewController);
 router.post('/profile/edit', verifyToken, requireClient, upload.single('clientAvatar'), clientsController.editProfileController);
-// router.get('/bookings/current', )
-// router.get('/bookings/history', )
+router.get('/bookings/current', clientsController.getCurrentBookings);
+router.get('/bookings/history', clientsController.getBookingHistory);
 router.get('/rent/:vehicleId', verifyToken, requireClient, clientsController.getRentCarView);
 router.post('/rent/:vehicleId', clientsController.createBookingClient);
 // router.get('/payment/:bookingId', )

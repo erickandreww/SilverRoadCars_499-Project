@@ -101,4 +101,28 @@ const createBookingClient = async (req, res, next) => {
     }
 }
 
-module.exports = { homeController, profileController, editviewController, editProfileController, getRentCarView, createBookingClient };
+const getCurrentBookings = async (req, res, next) => {
+  const clientId = req.authUser.clientId;
+  try {
+    const bookings = await bookingsModel.getCurrentBookingsByClientId(clientId);
+    
+
+    res.render("clients/currentBookings", { title: 'Current Bookings', bookings });
+  } catch (err) {
+    console.error("Error fetching current bookings:", err);
+    next(err);
+  }
+}
+const getBookingHistory = async (req, res, next) => {
+  const clientId = req.authUser.clientId;
+  try {
+    const bookings = await bookingsModel.getBookingHistoryByClientId(clientId);
+
+    res.render("clients/bookingHistory", { title: 'Booking History', bookings });
+  } catch (err) {
+    console.error("Error fetching booking history:", err);
+    next(err);
+  }
+}
+
+module.exports = { homeController, profileController, editviewController, editProfileController, getRentCarView, createBookingClient, getCurrentBookings, getBookingHistory };
