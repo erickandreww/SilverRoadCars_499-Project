@@ -857,4 +857,57 @@ form[action="/admin/vehicles/delete"] button:hover {
   margin: 0;
 }
 
+.payment-section {
+  max-width: 800px;
+}
+
+.payment-summary {
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+}
+
+.payment-summary h3 {
+  margin-top: 0;
+}
+
+.payment-summary p {
+  margin: 0.65rem 0;
+}
+
+.payment-total {
+  font-size: 1.2rem;
+  color: #111827;
+}
+
+.payment-form fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.payment-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.payment-form input {
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.payment-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
 /*# sourceMappingURL=styles.css.map */
