@@ -96,4 +96,14 @@ async function closeBooking(bookingId) {
   return result.rows[0];
 }
 
-module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, closeBooking }
+async function createBooking(clientId, vehicleId, startDate, endDate, totalDays, totalValue, bookingStatus) {
+  const sql = `
+    INSERT INTO "Bookings" ("clientId", "vehicleId", "startDate", "endDate", "totalDays", "totalValue", "bookingStatus")
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *;
+  `;
+  const result = await pool.query(sql, [clientId, vehicleId, startDate, endDate, totalDays, totalValue, bookingStatus]);
+  return result.rows[0];
+}
+
+module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, closeBooking, createBooking }

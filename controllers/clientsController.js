@@ -1,5 +1,7 @@
 const clientModel = require('../models/clients');
 const jwt = require('jsonwebtoken');
+const vehiclesModel = require('../models/vehicles');
+const bookingsModel = require('../models/bookings');
 
 const homeController = async (req, res) => {
   res.render("clients/client", { title: 'Client Home', error: null });
@@ -49,4 +51,54 @@ const editProfileController = async (req, res) => {
     }
 }
 
-module.exports = { homeController, profileController, editviewController, editProfileController };
+
+const getRentCarView = async (req, res, next) => {
+  const { vehicleId } = req.params;
+  try {
+    const car = await vehiclesModel.getCar(vehicleId);
+
+    if (!car) {
+      return res.status(404).render("clients/rentCar", { title: 'Rent Car', error: 'Car not found.', car: null });
+    }
+    res.render("clients/rentCar", { title: 'Rent Car', error: null, car });
+  } catch (err) {
+    next(err);
+  }
+}
+
+const createBookingClient = async (req, res, next) => {
+    const { vehicleId } = req.params;
+    const { startDate, endDate } = req.body;
+    const clientId = req.authUser.clientId;
+
+    try {
+        const car = await vehiclesModel.getCar(vehicleId);
+        if (!car) {
+            return res.status(404).render("clients/rentCar", { title: 'Rent Car', error: 'Car not found.', car: null });
+        }
+
+        const pricePerDay = parseFloat(car.dailyPrice);
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const timeDiff = end.getTime() - start.getTime();
+        
+
+        const totalDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+        
+        if (totalDays <= 0) {
+            return res.status(400).render("clients/rentCar", { title: 'Rent Car', car: car, error: 'End date must be after start date.' });
+        }
+
+        const totalValue = totalDays * pricePerDay;
+        await bookingsModel.createBooking(clientId, vehicleId, startDate, endDate, totalDays, totalValue, 'pending');
+        
+        res.redirect('/clients');
+    } catch (err) {
+        console.error("Booking Error:", err);
+        const car = await vehiclesModel.getCar(vehicleId).catch(() => null);
+        res.status(500).render("clients/rentCar", { title: 'Rent Car', car: car, error: 'Failed to create booking. Please try again.' });
+    }
+}
+
+module.exports = { homeController, profileController, editviewController, editProfileController, getRentCarView, createBookingClient };

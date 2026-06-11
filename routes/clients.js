@@ -11,7 +11,8 @@ router.get('/profile/edit', verifyToken, requireClient, clientsController.editvi
 router.post('/profile/edit', verifyToken, requireClient, upload.single('clientAvatar'), clientsController.editProfileController);
 // router.get('/bookings/current', )
 // router.get('/bookings/history', )
-// router.get('/rent/:carId', )
+router.get('/rent/:vehicleId', verifyToken, requireClient, clientsController.getRentCarView);
+router.post('/rent/:vehicleId', clientsController.createBookingClient);
 // router.get('/payment/:bookingId', )
 
 /* GET Clients Page. */
