@@ -91,8 +91,16 @@ const createBookingClient = async (req, res, next) => {
         }
 
         const totalValue = totalDays * pricePerDay;
-        await bookingsModel.createBooking(clientId, vehicleId, startDate, endDate, totalDays, totalValue, 'pending');
+        const result = await bookingsModel.createBooking(clientId, vehicleId, startDate, endDate, totalDays, totalValue, 'pending');
         
+        if (result?.conflict) {
+          return res.status(400).render("clients/rentCar", {
+            title: "Rent Car",
+            car,
+            error: "This vehicle is already booked or requested for the selected dates."
+          });
+        }
+
         res.redirect('/clients');
     } catch (err) {
         console.error("Booking Error:", err);

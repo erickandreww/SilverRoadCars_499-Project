@@ -1,4 +1,5 @@
 const pool = require("../config/db")
+const crypto = require("crypto");
 
 async function getAllBookings() {
   const sql = `
@@ -56,7 +57,51 @@ async function approveBooking(bookingId, approvedBy) {
 
   try {
     await client.query("BEGIN");
+    
+    // solve conflics problem
+    const currentBookingSql = `
+      SELECT *
+      FROM "Bookings"
+      WHERE "bookingId" = $1
+        AND "bookingStatus" = 'pending'
+      FOR UPDATE;
+    `;
 
+    const currentBookingResult = await client.query(currentBookingSql, [bookingId]);
+    const currentBooking = currentBookingResult.rows[0];
+
+    if (!currentBooking) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const conflictSql = `
+      SELECT *
+      FROM "Bookings"
+      WHERE "vehicleId" = $1
+        AND "bookingId" != $2
+        AND "bookingStatus" IN ('approved', 'active')
+        AND "startDate" <= $4
+        AND "endDate" >= $3
+      LIMIT 1;
+    `;
+
+    const conflictResult = await client.query(conflictSql, [
+      currentBooking.vehicleId,
+      currentBooking.bookingId,
+      currentBooking.startDate,
+      currentBooking.endDate
+    ]);
+
+    if (conflictResult.rows.length > 0) {
+      await client.query("ROLLBACK");
+      return {
+        conflict: true,
+        booking: conflictResult.rows[0]
+      };
+    }
+
+    // bookings and vehicles update
     const bookingSql = `
       UPDATE "Bookings" 
       SET 
@@ -64,7 +109,7 @@ async function approveBooking(bookingId, approvedBy) {
         "bookingStatus" = 'approved',
         "updatedAt" = NOW()
       WHERE "bookingId" = $2 AND "bookingStatus" = 'pending'
-      RETURNING *;
+      RETURNING *
     `;
 
     const result = await client.query(bookingSql, [approvedBy, bookingId]);
@@ -272,12 +317,24 @@ async function closeBooking(bookingId) {
 }
 
 async function createBooking(clientId, vehicleId, startDate, endDate, totalDays, totalValue, bookingStatus) {
+  const conflict = await checkBookingConflict(vehicleId, startDate, endDate);
+
+  if (conflict) {
+    return {
+      conflict: true,
+      booking: conflict
+    };
+  }
+
+  const bookingId = crypto.randomUUID();
+  
   const sql = `
-    INSERT INTO "Bookings" ("clientId", "vehicleId", "startDate", "endDate", "totalDays", "totalValue", "bookingStatus")
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO "Bookings" ("bookingId", "clientId", "vehicleId", "startDate", "endDate", "totalDays", 
+    "totalValue", "bookingStatus", "createdAt", "updatedAt")
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
     RETURNING *;
   `;
-  const result = await pool.query(sql, [clientId, vehicleId, startDate, endDate, totalDays, totalValue, bookingStatus]);
+  const result = await pool.query(sql, [bookingId, clientId, vehicleId, startDate, endDate, totalDays, totalValue, bookingStatus]);
   return result.rows[0];
 }
 
@@ -309,5 +366,28 @@ async function getBookingHistoryByClientId(clientId) {
   return result.rows;
 }
 
-module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, 
-  closeBooking, createBooking, getCurrentBookingsByClientId, getBookingHistoryByClientId, activateBooking, cancelBooking }
+async function checkBookingConflict(vehicleId, startDate, endDate, bookingIdToIgnore = null) {
+  let sql = `
+    SELECT *
+    FROM "Bookings"
+    WHERE "vehicleId" = $1
+      AND "bookingStatus" IN ('pending', 'approved', 'active')
+      AND "startDate" <= $3
+      AND "endDate" >= $2
+  `;
+
+  const params = [vehicleId, startDate, endDate];
+
+  if (bookingIdToIgnore) {
+    sql += ` AND "bookingId" != $4`;
+    params.push(bookingIdToIgnore);
+  }
+
+  sql += ` LIMIT 1;`;
+
+  const result = await pool.query(sql, params);
+  return result.rows[0];
+}
+
+module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, closeBooking, 
+  createBooking, getCurrentBookingsByClientId, getBookingHistoryByClientId, activateBooking, cancelBooking, checkBookingConflict }

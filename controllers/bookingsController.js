@@ -64,6 +64,12 @@ const approveBooking = async (req, res, next) => {
       res.locals?.sessionUser?.userId;
     
     const result = await bookingsModel.approveBooking(bookingId, approvedBy);
+
+    if (result?.conflict) {
+      const err = new Error("This booking conflicts with another approved or active booking");
+      err.status = 400;
+      return next(err);
+    }
     
     if (!result) {
       const err = new Error("Booking could not be approved");
