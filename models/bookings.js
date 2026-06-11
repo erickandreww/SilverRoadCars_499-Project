@@ -52,48 +52,136 @@ async function getPendingBookings() {
 }
 
 async function approveBooking(bookingId, approvedBy) {
-  const sql = `
-    UPDATE "Bookings" 
-    SET 
-      "approvedBy" = $1,
-      "bookingStatus" = 'approved',
-      "updatedAt" = NOW()
-    WHERE "bookingId" = $2 AND "bookingStatus" = 'pending'
-    RETURNING *;
-  `;
+  const client = await pool.connect();
 
-  const result = await pool.query(sql, [approvedBy, bookingId]);
-  return result.rows[0]
+  try {
+    await client.query("BEGIN");
+
+    const bookingSql = `
+      UPDATE "Bookings" 
+      SET 
+        "approvedBy" = $1,
+        "bookingStatus" = 'approved',
+        "updatedAt" = NOW()
+      WHERE "bookingId" = $2 AND "bookingStatus" = 'pending'
+      RETURNING *;
+    `;
+
+    const result = await client.query(bookingSql, [approvedBy, bookingId]);
+    const booking = result.rows[0];
+
+    if (!booking) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const vehicleSql = `
+      UPDATE "Vehicles" 
+      SET 
+        "availabilityStatus" = 'reserved',
+        "updatedAt" = NOW()
+      WHERE "vehicleId" = $1 
+        AND "availabilityStatus" = 'available';
+    `;
+
+    await client.query(vehicleSql, [booking.vehicleId]);
+
+    await client.query("COMMIT");
+    return booking;
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 async function rejectBooking(bookingId, approvedBy) {
-  const sql = `
-    UPDATE "Bookings" 
-    SET 
-      "approvedBy" = $1,
-      "bookingStatus" = 'rejected',
-      "updatedAt" = NOW()
-    WHERE "bookingId" = $2 AND "bookingStatus" = 'pending'
-    RETURNING *;
-  `;
+  const client = await pool.connect();
 
-  const result = await pool.query(sql, [approvedBy, bookingId]);
-  return result.rows[0]
+  try {
+    await client.query("BEGIN");
+
+    const bookingSql = `
+      UPDATE "Bookings"
+      SET
+        "approvedBy" = $1,
+        "bookingStatus" = 'rejected',
+        "updatedAt" = NOW()
+      WHERE "bookingId" = $2 AND "bookingStatus" = 'pending'
+      RETURNING *;
+    `;
+
+    const result = await client.query(bookingSql, [approvedBy, bookingId]);
+    const booking = result.rows[0];
+
+    if (!booking) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const vehicleSql = `
+      UPDATE "Vehicles"
+      SET
+        "availabilityStatus" = 'available',
+        "updatedAt" = NOW()
+      WHERE "vehicleId" = $1;
+    `;
+
+    await client.query(vehicleSql, [booking.vehicleId]);
+
+    await client.query("COMMIT");
+    return booking;
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 async function closeBooking(bookingId) {
-  const sql = `
-    UPDATE "Bookings"
-    SET
-      "bookingStatus" = 'completed',
-      "updatedAt" = NOW()
-    WHERE "bookingId" = $1
-      AND "bookingStatus" = 'active'
-    RETURNING *;
-  `;
+  const client = await pool.connect();
 
-  const result = await pool.query(sql, [bookingId]);
-  return result.rows[0];
+  try {
+    await client.query("BEGIN");
+
+    const bookingSql = `
+      UPDATE "Bookings"
+      SET
+        "bookingStatus" = 'completed',
+        "updatedAt" = NOW()
+      WHERE "bookingId" = $1
+        AND "bookingStatus" = 'active'
+      RETURNING *;
+    `;
+
+    const bookingResult = await client.query(bookingSql, [bookingId]);
+    const booking = bookingResult.rows[0];
+
+    if (!booking) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const vehicleSql = `
+      UPDATE "Vehicles"
+      SET
+        "availabilityStatus" = 'available',
+        "updatedAt" = NOW()
+      WHERE "vehicleId" = $1;
+    `;
+
+    await client.query(vehicleSql, [booking.vehicleId]);
+
+    await client.query("COMMIT");
+    return booking;
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 async function createBooking(clientId, vehicleId, startDate, endDate, totalDays, totalValue, bookingStatus) {

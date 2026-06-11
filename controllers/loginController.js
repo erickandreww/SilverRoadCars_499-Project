@@ -77,7 +77,7 @@ const loginUser = async (req, res, next) => {
     const token = jwt.sign(payLoad, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '1d' });
     res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 1000 * 60 * 60 * 24 });
     
-    res.redirect('/');
+    res.redirect('/users');
   } catch (err) {
     next(err);
   }
