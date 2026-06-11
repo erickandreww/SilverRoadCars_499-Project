@@ -140,6 +140,93 @@ async function rejectBooking(bookingId, approvedBy) {
   }
 }
 
+async function activateBooking(bookingId) {
+  const client = await pool.connect()
+  
+  try {
+    await client.query("BEGIN");
+
+    const bookingSql = `
+      UPDATE "Bookings"
+      SET
+        "bookingStatus" = 'active',
+        "updatedAt" = NOW()
+      WHERE "bookingId" = $1 AND "bookingStatus" = 'approved'
+      RETURNING *;
+    `;
+
+    const result = await client.query(bookingSql, [bookingId]);
+    const booking = result.rows[0];
+
+    if (!booking) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const vehicleSql = `
+      UPDATE "Vehicles"
+      SET 
+        "availabilityStatus" = 'rented',
+        "updatedAt" = NOW()
+      WHERE "vehicleId" = $1
+    `;
+
+    await client.query(vehicleSql, [booking.vehicleId]);
+
+    await client.query("COMMIT");
+    return booking
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err
+  } finally {
+    client.release();
+  }
+}
+
+async function cancelBooking(bookingId) {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const bookingSql = `
+      UPDATE "Bookings"
+      SET
+        "bookingStatus" = 'canceled',
+        "updatedAt" = NOW()
+      WHERE "bookingId" = $1
+        AND "bookingStatus" = 'approved'
+      RETURNING *;
+    `;
+
+    const bookingResult = await client.query(bookingSql, [bookingId]);
+    const booking = bookingResult.rows[0];
+
+    if (!booking) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const vehicleSql = `
+      UPDATE "Vehicles"
+      SET
+        "availabilityStatus" = 'available',
+        "updatedAt" = NOW()
+      WHERE "vehicleId" = $1;
+    `;
+
+    await client.query(vehicleSql, [booking.vehicleId]);
+
+    await client.query("COMMIT");
+    return booking;
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
 async function closeBooking(bookingId) {
   const client = await pool.connect();
 
@@ -222,4 +309,5 @@ async function getBookingHistoryByClientId(clientId) {
   return result.rows;
 }
 
-module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, closeBooking, createBooking, getCurrentBookingsByClientId, getBookingHistoryByClientId }
+module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, 
+  closeBooking, createBooking, getCurrentBookingsByClientId, getBookingHistoryByClientId, activateBooking, cancelBooking }

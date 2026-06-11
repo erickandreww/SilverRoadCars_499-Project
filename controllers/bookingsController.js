@@ -122,4 +122,73 @@ const closeBooking = async (req, res, next) => {
   }
 }
 
-module.exports = { getAllBookings, getBookingsRequests, getBooking, approveBooking, rejectBooking, closeBooking }
+const buildPaymentPage = async (req, res, next) => {
+  const { bookingId } = req.params;
+  try {
+    const data= await bookingsModel.getBookingById(bookingId);
+
+    if (!data) {
+      const err = new Error("Booking not found");
+      err.status = 404;
+      return next(err);
+    }
+
+    if (data.bookingStatus !== "approved") {
+      const err = new Error("This booking is not ready for payment");
+      err.status = 400;
+      return next(err);
+    }
+
+    res.render("bookings/payment", {
+      title: "Booking Payment",
+      errors: null,
+      data
+    })
+  } catch (err) {
+    console.error(`Error getting payment page for booking ${bookingId}:`, err);
+    err.status = 500;
+    next(err);
+  }
+}
+
+const processPayment = async (req, res, next) => {
+  const { bookingId } = req.params;
+  try {
+    const result = await bookingsModel.activateBooking(bookingId);
+
+    if (!result) {
+      const err = new Error("Payment could not be processed")
+      err.status = 400;
+      return next(err);
+    }
+
+    res.redirect(`/clients/bookings/current`);
+  } catch (err) {
+    console.error(`Error processing payment for booking ${bookingId}:`, err);
+    err.status = 500;
+    next(err);
+  }
+}
+
+const cancelBooking = async (req, res, next) => {
+  const { bookingId } = req.params;
+
+  try {
+    const result = await bookingsModel.cancelBooking(bookingId);
+
+    if (!result) {
+      const err = new Error("Booking could not be cancelled");
+      err.status = 400;
+      return next(err);
+    }
+
+    res.redirect("/clients/bookings/current");
+  } catch (err) {
+    console.error(`Error cancelling booking with ID ${bookingId}:`, err);
+    err.status = 500;
+    next(err);
+  }
+};
+
+module.exports = { getAllBookings, getBookingsRequests, getBooking, approveBooking, 
+  rejectBooking, closeBooking, buildPaymentPage, processPayment, cancelBooking }
