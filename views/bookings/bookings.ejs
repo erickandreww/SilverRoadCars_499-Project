@@ -81,6 +81,6 @@
   <% } else { %>
     <p class="notice">No bookings were found.</p>
   <% } %>
-
+  <%- include("../partials/pagination", { pagination }) %>
   <a href="/users" class="return-link">Return to Users Dashboard</a>
 </section>

@@ -46,6 +46,6 @@
   <% } else { %>
     <p class="notice">No vehicles were found.</p>
   <% } %>
-
+  <%- include("../partials/pagination", { pagination }) %>
   <a href="/admin" class="return-link">Return to Dashboard</a>
 </section>

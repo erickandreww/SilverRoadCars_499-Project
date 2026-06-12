@@ -1,0 +1,24 @@
+<% if (pagination && pagination.totalPages > 1) { %>
+  <nav class="pagination" aria-label="Pagination">
+    <% if (pagination.hasPrevious) { %>
+      <a href="?page=<%= pagination.previousPage %>" class="pagination-link">
+        Previous
+      </a>
+    <% } %>
+
+    <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+      <a
+        href="?page=<%= i %>"
+        class="pagination-link <%= pagination.page === i ? 'active' : '' %>"
+      >
+        <%= i %>
+      </a>
+    <% } %>
+
+    <% if (pagination.hasNext) { %>
+      <a href="?page=<%= pagination.nextPage %>" class="pagination-link">
+        Next
+      </a>
+    <% } %>
+  </nav>
+<% } %>

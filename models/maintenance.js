@@ -1,17 +1,28 @@
 const pool = require("../config/db")
 const crypto = require("crypto");
 
-async function getAllMaintenances() {
+async function getAllMaintenances(limit = 10, offset = 0) {
   const sql = `
     SELECT m.*, v."brand", v."model", v."plate", u."userName" AS "createdByName"
     FROM "Maintenance" m
     LEFT JOIN "Vehicles" v ON m."vehicleId" = v."vehicleId"
     LEFT JOIN "Users" u ON m."createdBy" = u."userId"
     ORDER BY m."createdAt" DESC
+    LIMIT $1 OFFSET $2
+  `;
+
+  const result = await pool.query(sql, [limit, offset]);
+  return result.rows;
+}
+
+async function countAllMaintenance() {
+  const sql = `
+    SELECT COUNT(*) AS count
+    FROM "Maintenance";
   `;
 
   const result = await pool.query(sql);
-  return result.rows;
+  return parseInt(result.rows[0].count);
 }
 
 async function getMaintenance(maintenanceId) {
@@ -67,4 +78,4 @@ async function deleteMaintenance(maintenanceId) {
   return result.rows[0];
 }
 
-module.exports = { getAllMaintenances, getMaintenance , newMaintenance, updateMaintenance, deleteMaintenance}
+module.exports = { getAllMaintenances, countAllMaintenance, getMaintenance , newMaintenance, updateMaintenance, deleteMaintenance}

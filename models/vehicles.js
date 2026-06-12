@@ -13,6 +13,24 @@ async function getCar(vehicleId) {
   return result.rows[0];
 }
 
+async function admGetAllVehicles(limit = 10, offset = 0) {
+  const sql = `SELECT * 
+    FROM "Vehicles" ORDER BY "createdAt" DESC 
+    LIMIT $1 OFFSET $2`;
+  const result = await pool.query(sql, [limit, offset]);
+  return result.rows;
+}
+
+async function countAllVehicles() {
+  const sql = `
+    SELECT COUNT(*) AS count
+    FROM "Vehicles";
+  `;
+
+  const result = await pool.query(sql);
+  return parseInt(result.rows[0].count);
+}
+
 async function newCar(brand, model, plate, year, imageUrl, color, 
   category, transmission, fuelType, seats, mileage, dailyPrice, 
   availabilityStatus, maintenanceStatus) {
@@ -67,4 +85,4 @@ async function deleteCar(vehicleId) {
 }
 
 
-module.exports = {getAllVehicles, getCar, newCar, updateCar, deleteCar}
+module.exports = {getAllVehicles, getCar, admGetAllVehicles, countAllVehicles, newCar, updateCar, deleteCar}

@@ -1,5 +1,6 @@
 const vehiclesModel = require('../models/vehicles');
 const utilities = require('../utilities/index');
+const { getPageOffset, getPaginationData } = require("../utilities/pagination");
 
 const getAllVehicles = async (req, res, next) => {
     try {
@@ -16,11 +17,17 @@ const getAllVehicles = async (req, res, next) => {
 
 const admGetAllVehicles = async (req, res, next) => {
   try {
-    const vehicles = await vehiclesModel.getAllVehicles();
+    const { limit, offset } = getPageOffset(req, 8);
+
+    const totalItems = await vehiclesModel.countAllVehicles();
+    const vehicles = await vehiclesModel.admGetAllVehicles(limit, offset);
+
+    const pagination = getPaginationData(req, totalItems, limit);
 
     res.render("vehicles/admVehicles", {
       title: "Vehicles",
-      vehicles
+      vehicles,
+      pagination
     });
   } catch (err) {
     next(err);

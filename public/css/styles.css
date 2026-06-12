@@ -966,5 +966,33 @@ form[action="/admin/vehicles/delete"] button:hover {
   margin: 0;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.pagination-link {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 700;
+  background-color: #ffffff;
+}
+
+.pagination-link:hover {
+  background-color: #eff6ff;
+}
+
+.pagination-link.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
 
 /*# sourceMappingURL=styles.css.map */

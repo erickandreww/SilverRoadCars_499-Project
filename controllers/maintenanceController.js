@@ -1,13 +1,20 @@
 const maintenanceModel = require('../models/maintenance');
 const vehiclesModel = require('../models/vehicles');
+const { getPageOffset, getPaginationData } = require("../utilities/pagination");
 
 const getAllMaintenances = async (req, res, next)  => {
   try {
-    const data = await maintenanceModel.getAllMaintenances();
+    const { limit, offset } = getPageOffset(req, 10);
+
+    const totalItems = await maintenanceModel.countAllMaintenance();
+    const data = await maintenanceModel.getAllMaintenances(limit, offset);
+
+    const pagination = getPaginationData(req, totalItems, limit);
 
     res.render("maintenance/maintenance", {
       title: "Maintenance", 
-      data
+      data,
+      pagination
     });
   } catch (err) {
     next(err);

@@ -40,3 +40,6 @@
   <% } else { %>
     <p class="notice">No maintenance records found.</p>
   <% } %>
+  <%- include("../partials/pagination", { pagination }) %>
+  <a href="/users" class="return-link">Return to Users Dashboard</a>
+</section>

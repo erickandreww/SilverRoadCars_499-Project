@@ -1,13 +1,20 @@
 const bookingsModel = require('../models/bookings');
+const { getPageOffset, getPaginationData } = require('../utilities/pagination');
 
 const getAllBookings = async (req, res, next) => {
   try {
-    const data = await bookingsModel.getAllBookings();
+    const { limit, offset } = getPageOffset(req, 6);
+
+    const totalItems = await bookingsModel.countAllBookings();
+    const data = await bookingsModel.getAllBookings(limit, offset);
+
+    const pagination = getPaginationData(req, totalItems, limit);
 
     res.render("bookings/bookings", {
       title: "Bookings",
       errors: null,
-      data
+      data,
+      pagination
     });
   } catch (err) {
     console.error("Error getting bookings:", err);

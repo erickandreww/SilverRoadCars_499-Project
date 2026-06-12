@@ -1,14 +1,21 @@
 const usersModel = require("../models/users")
 const utilities = require("../utilities/index")
+const { getPageOffset, getPaginationData } = require("../utilities/pagination");
 const bcrypt = require('bcryptjs');
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await usersModel.getAllUsers();
+    const { limit, offset } = getPageOffset(req, 8);
+
+    const totalItems = await usersModel.countAllUsers();
+    const users = await usersModel.getAllUsers(limit, offset);
+    
+    const pagination = getPaginationData(req, totalItems, limit);
 
     res.render("users/users", {
       title: "Users",
-      users
+      users,
+      pagination
     });
   } catch (err) {
     next(err);

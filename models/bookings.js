@@ -1,7 +1,7 @@
 const pool = require("../config/db")
 const crypto = require("crypto");
 
-async function getAllBookings() {
+async function getAllBookings(limit = 10, offset = 0) {
   const sql = `
     SELECT b."bookingId", b."clientId", b."vehicleId", b."approvedBy", b."bookingStatus", 
       b."startDate", b."endDate", b."totalDays", b."totalValue", b."createdAt", b."updatedAt",
@@ -13,9 +13,21 @@ async function getAllBookings() {
     LEFT JOIN "Vehicles" v ON b."vehicleId" = v."vehicleId"
     LEFT JOIN "Users" u ON b."approvedBy" = u."userId"
     ORDER BY b."createdAt" DESC
+    LIMIT $1 OFFSET $2;
   `;
-  const result = await pool.query(sql);
+
+  const result = await pool.query(sql, [limit, offset]);
   return result.rows;
+}
+
+async function countAllBookings() {
+  const sql = `
+    SELECT COUNT(*) AS count
+    FROM "Bookings";
+  `;
+
+  const result = await pool.query(sql);
+  return parseInt(result.rows[0].count);
 }
 
 async function getBookingById(bookingId) {
@@ -389,5 +401,6 @@ async function checkBookingConflict(vehicleId, startDate, endDate, bookingIdToIg
   return result.rows[0];
 }
 
-module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, closeBooking, 
-  createBooking, getCurrentBookingsByClientId, getBookingHistoryByClientId, activateBooking, cancelBooking, checkBookingConflict }
+module.exports = { getAllBookings, getBookingById, getPendingBookings, approveBooking, rejectBooking, 
+  closeBooking, createBooking, getCurrentBookingsByClientId, getBookingHistoryByClientId, 
+  activateBooking, cancelBooking, checkBookingConflict, countAllBookings }

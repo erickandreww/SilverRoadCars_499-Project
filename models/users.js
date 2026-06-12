@@ -13,10 +13,20 @@ async function getUserByEmail(userEmail) {
   return result.rows[0];
 }
 
-async function getAllUsers() {
-  const query = `SELECT * FROM "Users" ORDER BY "createdAt" DESC`
-  const result = await pool.query(query)
-  return result.rows
+async function getAllUsers(limit = 10, offset = 0) {
+  const query = `SELECT * FROM "Users" ORDER BY "createdAt" DESC LIMIT $1 OFFSET $2;`
+  const result = await pool.query(query, [limit, offset])
+  return result.rows;
+}
+
+async function countAllUsers() {
+  const sql = `
+    SELECT COUNT(*) AS count
+    FROM "Users";
+  `;
+
+  const result = await pool.query(sql);
+  return parseInt(result.rows[0].count);
 }
 
 async function updateUser(userId, userName, userEmail, userPassword,userRole) {
@@ -81,4 +91,4 @@ async function createUser(userName, userEmail, hashedPassword) {
   return result.rows[0];
 }
 
-module.exports = { getAllUsers, getUserById, getUserByEmail, createUser, createNewUser, updateUser, deleteUser }
+module.exports = { getAllUsers, getUserById, getUserByEmail, createUser, createNewUser, updateUser, deleteUser, countAllUsers }
