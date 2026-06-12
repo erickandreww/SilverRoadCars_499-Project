@@ -262,7 +262,709 @@ body footer #links {
   }
 }
 
-/*# sourceMappingURL=styles.css.map */
+
+/* Auth pages */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 90px);
+  background-color: #f4f4f4;
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-card h1 {
+  font-family: "Boogaloo", cursive;
+  font-size: 2rem;
+  margin: 0 0 1.5rem 0;
+  color: #000000;
+  text-align: center;
+}
+
+.auth-error {
+  background-color: #ffe5e5;
+  color: #cc0000;
+  border: 1px solid #cc0000;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-group label {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333333;
+}
+
+.form-group input {
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #C7C7C7;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: "Roboto Condensed", sans-serif;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #319CC6;
+}
+
+.btn-primary {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #FF6F15;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-family: "Boogaloo", cursive;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #e05e0a;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+  color: #555555;
+}
+
+.auth-switch a {
+  color: #319CC6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+.auth-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-secondary {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #319CC6;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-family: "Boogaloo", cursive;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #b0b0b0;
+}
+
+/* Admin Dashboard */
+.admin-dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.dashboard-intro {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard-card {
+  display: block;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.dashboard-card p {
+  margin-bottom: 1rem;
+}
+
+.dashboard-card span {
+  font-weight: bold;
+}
+
+
+/* ============================= */
+/* Admin General Layout */
+/* ============================= */
+
+h1 {
+  max-width: 1100px;
+  margin: 2rem auto 1rem auto;
+  padding: 0 1rem;
+  color: #111827;
+}
+
+.admin-section,
+.maintenance-section {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.admin-section h2,
+.maintenance-section h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+/* ============================= */
+/* Admin Dashboard */
+/* ============================= */
+
+.admin-dashboard {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.dashboard-intro {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: #4b5563;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard-card {
+  display: block;
+  padding: 1.75rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #111827;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-card h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #111827;
+}
+
+.dashboard-card p {
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.dashboard-card span {
+  display: inline-block;
+  margin-top: 1rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* ============================= */
+/* Admin Forms */
+/* ============================= */
+
+.admin-form,
+.addUser,
+.editUser,
+.addCar,
+.editCar,
+.maintenance-form,
+#addUser-form,
+#editUser-form,
+#addCar-form,
+#editCar-form {
+  width: 100%;
+}
+
+.admin-form fieldset,
+.addUser fieldset,
+.editUser fieldset,
+.addCar fieldset,
+.editCar fieldset,
+.maintenance-form fieldset,
+#addUser-form fieldset,
+#editUser-form fieldset,
+#addCar-form fieldset,
+#editCar-form fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-form label,
+.addUser label,
+.editUser label,
+.addCar label,
+.editCar label,
+.maintenance-form label,
+#addUser-form label,
+#editUser-form label,
+#addCar-form label,
+#editCar-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea,
+.addUser input,
+.addUser select,
+.addUser textarea,
+.editUser input,
+.editUser select,
+.editUser textarea,
+.addCar input,
+.addCar select,
+.addCar textarea,
+.editCar input,
+.editCar select,
+.editCar textarea,
+.maintenance-form input,
+.maintenance-form select,
+.maintenance-form textarea,
+#addUser-form input,
+#addUser-form select,
+#editUser-form input,
+#editUser-form select,
+#addCar-form input,
+#addCar-form select,
+#editCar-form input,
+#editCar-form select {
+  width: 100%;
+  margin-top: 0.4rem;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+.admin-form textarea,
+.maintenance-form textarea {
+  resize: vertical;
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus,
+.addUser input:focus,
+.addUser select:focus,
+.editUser input:focus,
+.editUser select:focus,
+.addCar input:focus,
+.addCar select:focus,
+.editCar input:focus,
+.editCar select:focus,
+.maintenance-form input:focus,
+.maintenance-form select:focus,
+.maintenance-form textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+button,
+.btn-primary {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button:hover,
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-danger,
+.delete-form button,
+form[action="/admin/users/delete"] button,
+form[action="/admin/vehicles/delete"] button {
+  margin-top: 1rem;
+  background-color: #dc2626;
+}
+
+.btn-danger:hover,
+.delete-form button:hover,
+form[action="/admin/users/delete"] button:hover,
+form[action="/admin/vehicles/delete"] button:hover {
+  background-color: #b91c1c;
+}
+
+.delete-form {
+  margin-top: 1rem;
+}
+
+.admin-table,
+.users-table,
+.vehicles-table {
+  width: 100%;
+  max-width: 1100px;
+  margin: 2rem auto;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.admin-table thead,
+.users-table thead,
+.vehicles-table thead {
+  background-color: #111827;
+  color: #ffffff;
+}
+
+.admin-table th,
+.admin-table td,
+.users-table th,
+.users-table td,
+.vehicles-table th,
+.vehicles-table td {
+  padding: 0.9rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-table tbody tr:hover,
+.users-table tbody tr:hover,
+.vehicles-table tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+.admin-table a,
+.users-table a,
+.vehicles-table a {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-table a:hover,
+.users-table a:hover,
+.vehicles-table a:hover {
+  text-decoration: underline;
+}
+
+#inv-display {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+#inv-display li {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+#inv-display a {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+#inv-display a:hover {
+  text-decoration: underline;
+}
+
+.notice {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-left: 5px solid #dc2626;
+  border-radius: 8px;
+  list-style-position: inside;
+}
+
+.success {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background-color: #dcfce7;
+  color: #166534;
+  border-left: 5px solid #16a34a;
+  border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+  h1 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .admin-dashboard,
+  .admin-section,
+  .maintenance-section {
+    margin: 1rem;
+    padding: 1.25rem;
+  }
+
+  .admin-table,
+  .users-table,
+  .vehicles-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  #inv-display {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-list-section {
+  max-width: 1100px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.table-action {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.table-action:hover {
+  text-decoration: underline;
+}
+
+.return-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #374151;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.return-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.admin-dashboard,
+.users-dashboard {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+/* ============================= */
+/* Bookings Pages */
+/* ============================= */
+
+.bookings-table small {
+  color: #6b7280;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.inline-form {
+  display: inline-block;
+  margin: 0;
+}
+
+.btn-small {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+.btn-success {
+  background-color: #16a34a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-success:hover {
+  background-color: #15803d;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-approved {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.status-rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-cancelled {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.status-active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-completed {
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
+
+.booking-details-section {
+  max-width: 1100px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.details-card {
+  padding: 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+}
+
+.details-card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.details-card p {
+  margin: 0.65rem 0;
+  color: #374151;
+}
+
+.booking-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.booking-actions form {
+  margin: 0;
+}
 
 
 /*# sourceMappingURL=styles.css.map */
