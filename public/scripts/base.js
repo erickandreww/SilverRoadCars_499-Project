@@ -3,11 +3,13 @@
 const hamButton = document.querySelector("#menu");
 const navigation = document.querySelector("ul");
 const span = document.querySelector("#top");
+const actBtn = document.querySelector("#c-link");
 
 hamButton.addEventListener("click", () => {
   navigation.classList.toggle("open");
   hamButton.classList.toggle("open");
   span.classList.toggle("open");
+  actBtn.classList.toggle("open");
 
 });
 
@@ -16,6 +18,7 @@ window.addEventListener("resize", () => {
     navigation.classList.remove("open");
     hamButton.classList.remove("open");
     span.classList.remove("open");
+    actBtn.classList.remove("open");
   }
 });
 
@@ -46,3 +49,9 @@ document.getElementById("prev").addEventListener("click", () => {
 setInterval(() => {
   showSlide(current + 1);
 }, 7000);
+
+//current year
+var date = new Date();
+var year = date.getFullYear();
+document.querySelector('#current-year').textContent = year;
+document.querySelector('#last-mod').textContent = document.lastModified;

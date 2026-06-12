@@ -1,12 +1,13 @@
 @import "setup";
 
 body {
+  background-color: $orange;
   font-family: $f-accent;
   margin: 0;
 
   header {
     text-align: center;
-    background-color: $silver;
+    background-color: $blue;
     position: relative;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
@@ -98,19 +99,102 @@ body {
   }
 
   main {
+    padding: .8rem;
+
     .hero {
       img {
         width: 100%;
         height: auto;
       }
+
+      #c-link {
+        font-size: 1.3rem;
+        position: absolute;
+        top: 18%;
+        left: 5%;
+        color: #ffffff;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: .5rem 1rem;
+        margin: 0;
+        border-radius: 15px;
+      }
+
+      #c-link.open {
+        top: 40%;
+      }
+
+      #c-link:hover {
+        background-color: #fff;
+        color: #000;
+        border: solid 2.5px #000;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .cont-form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      form {
+        background-color: #e4eef1;
+        display: flex;
+        flex-direction: column;
+        padding: .5rem;
+        border: solid 1px #000;
+        margin: 1rem 0;
+        row-gap: 12px;
+        width: 100%;
+        max-width: 600px;
+
+        label {
+          font-size: 1.2rem;
+        }
+
+        select,
+        input,
+        button {
+          box-sizing: border-box;
+          height: 40px;
+          font-size: 1.2rem;
+          line-height: 1.2;
+          resize: vertical;
+        }
+
+        select {
+          width: 100%;
+        }
+
+        .datetime {
+          display: flex;
+          gap: 10px;
+          margin-top: .5rem;
+        }
+
+        .datetime input {
+          flex: 1;
+        }
+      }
     }
 
     section {
+
       .carousel {
         position: relative;
         width: 100%;
         max-width: 600px;
-        margin: auto;
+        margin: 0 auto;
+        background-color: $blue;
+
+        p {
+          text-align: center;
+          font-size: 2rem;
+          margin: 0;
+          padding-top: 1rem;
+        }
 
         .slide {
           width: 100%;
@@ -119,6 +203,9 @@ body {
 
         .slide.active {
           display: block;
+          padding: 1rem 2rem 1rem;
+          width: 85%;
+          margin: 0 auto;
         }
 
         button {
@@ -137,10 +224,53 @@ body {
       }
 
       .map {
-        width: 100%;
-        height: 400px;
         border: 0;
+        margin: 1rem auto;
+        margin-bottom: 0;
+        max-width: 600px;
+
+        iframe {
+          width: 100%;
+          height: 300px;
+
+        }
       }
+    }
+  }
+
+  footer {
+
+
+    background-color: $blue;
+    text-align: center;
+
+    h3,
+    p {
+      font-size: 2rem;
+      padding: .5rem .5rem 1rem;
+      margin: 0;
+    }
+
+    a {
+      font-size: 2rem;
+      color: $black;
+    }
+
+    #social {
+      display: flex;
+      padding: 1rem 2.5rem;
+      justify-content: center;
+
+      img {
+        width: 70px;
+      }
+    }
+
+    #support,
+    #links {
+      display: flex;
+      flex-direction: column;
+      padding-left: 2rem;
     }
   }
 }
@@ -186,3 +316,5 @@ body {
     }
   }
 }
+
+@media screen and (min-width: 760px) {}
