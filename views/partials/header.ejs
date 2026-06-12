@@ -13,10 +13,11 @@
           <% if (sessionUser.clientAvatar) { %>
             <img src="<%= sessionUser.clientAvatar %>" alt="Profile" class="nav-avatar" width="25" height="25" style="border-radius: 50%; vertical-align: middle; margin-right: 5px;">
           <% } %>
-          <% if (sessionUser && sessionUser.role === 'manager') { %>
-            <a href="/admin">Hello, <%= sessionUser.userName %></a>
-          <% } else { %>
-            <a href="/clients">Hello, <%= sessionUser.clientName || sessionUser.userName %></a>
+          <% if (sessionUser && sessionUser.role === 'client') { %>
+            <a href="/clients">Hello, <%= sessionUser.clientName %></a>
+          <% } %>
+          <% if (sessionUser && sessionUser.role === 'user') { %>
+            <a href="/users">Dashboard</a>
           <% } %>
         </li>
         <li><a href="/auth/logout">Logout</a></li>
