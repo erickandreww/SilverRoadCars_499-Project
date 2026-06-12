@@ -1,0 +1,107 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<section class="admin-section payment-section">
+  <h2>Complete Payment</h2>
+
+  <% if (data) { %>
+    <div class="payment-summary">
+      <h3>Booking Summary</h3>
+
+      <p>
+        <strong>Vehicle:</strong>
+        <%= data.brand %> <%= data.model %>
+      </p>
+
+      <p>
+        <strong>Plate:</strong>
+        <%= data.plate || "N/A" %>
+      </p>
+
+      <p>
+        <strong>Start Date:</strong>
+        <%= data.startDate ? new Date(data.startDate).toLocaleDateString() : "N/A" %>
+      </p>
+
+      <p>
+        <strong>End Date:</strong>
+        <%= data.endDate ? new Date(data.endDate).toLocaleDateString() : "N/A" %>
+      </p>
+
+      <p>
+        <strong>Total Days:</strong>
+        <%= data.totalDays %>
+      </p>
+
+      <p class="payment-total">
+        <strong>Total:</strong>
+        $<%= data.totalValue %>
+      </p>
+    </div>
+
+    <form class="payment-form" action="/clients/payment/<%= data.bookingId %>" method="post">
+      <fieldset>
+        <label for="cardName">Name on Card
+          <input type="text" id="cardName" name="cardName" required>
+        </label>
+
+        <label for="cardNumber">Card Number
+          <input
+            type="text"
+            id="cardNumber"
+            name="cardNumber"
+            placeholder="1234 5678 9012 3456"
+            maxlength="19"
+            required
+          >
+        </label>
+
+        <label for="expirationDate">Expiration Date
+          <input
+            type="text"
+            id="expirationDate"
+            name="expirationDate"
+            placeholder="MM/YY"
+            maxlength="5"
+            required
+          >
+        </label>
+
+        <label for="cvv">CVV
+          <input
+            type="text"
+            id="cvv"
+            name="cvv"
+            placeholder="123"
+            maxlength="4"
+            required
+          >
+        </label>
+
+        <button type="submit" class="btn-success">
+          Pay and Confirm Booking
+        </button>
+      </fieldset>
+    </form>
+    <form action="/clients/payment/<%= data.bookingId %>/cancel" method="post" class="delete-form">
+      <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to cancel this booking request?')">
+        Cancel Booking
+      </button>
+    </form>
+  <% } else { %>
+    <p class="notice">Booking not found.</p>
+  <% } %>
+
+  <a href="/clients/bookings/current" class="return-link">
+    Return to My Bookings
+  </a>
+</section>

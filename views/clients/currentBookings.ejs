@@ -1,0 +1,68 @@
+<% if (typeof title !== 'undefined' && title) { %>
+  <h1><%= title %></h1>
+<% } else { %>
+  <h1>Current Bookings</h1>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+  <p class="error" style="color: red; font-weight: bold;"><%= error %></p>
+<% } %>
+
+<section class="current-bookings">
+  <% if (locals.bookings && bookings.length > 0) { %>
+    <table class="bookings-table" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #f2f2f2; text-align: left;">
+          <th style="padding: 10px; border: 1px solid #ddd;">Vehicle</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Plate</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Start Date</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">End Date</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Total Paid</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Status</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% bookings.forEach(booking => { %>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              <%= booking.brand %> <%= booking.model %>
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd; text-transform: uppercase;">
+              <%= booking.plate %>
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              <%= new Date(booking.startDate).toLocaleDateString() %>
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              <%= new Date(booking.endDate).toLocaleDateString() %>
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #2ecc71;">
+              $<%= parseFloat(booking.totalValue).toFixed(2) %>
+            </td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+              <span style="text-transform: capitalize; font-weight: bold;">
+                <%= booking.bookingStatus %>
+              </span>
+            </td>  
+            <% if (booking.bookingStatus === 'approved') { %>
+              <td style="padding: 10px; border: 1px solid #ddd;">
+                <div style="margin: 0;">
+                  <a href="/clients/payment/<%= booking.bookingId %>"  class="btn-secondary" style="background-color: #1600ba; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold;">Pay Now</a>
+                </div>
+              </td>
+            <% } else { %>
+              <td style="padding: 10px; border: 1px solid #ddd;">
+                <span style="text-transform: capitalize; font-weight: bold;">
+                    Paid
+                </span>
+              </td>
+            <% } %>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p style="margin-top: 20px; color: #666;">You have no bookings.</p>
+  <% } %>
+</section>

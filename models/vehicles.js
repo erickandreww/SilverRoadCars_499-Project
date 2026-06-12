@@ -66,4 +66,5 @@ async function deleteCar(vehicleId) {
   return result.rows[0]
 }
 
+
 module.exports = {getAllVehicles, getCar, newCar, updateCar, deleteCar}

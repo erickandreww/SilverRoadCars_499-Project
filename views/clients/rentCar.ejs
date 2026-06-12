@@ -1,0 +1,39 @@
+<% if (typeof title !== 'undefined' && title) { %>
+  <h1><%= title %></h1>
+<% } else { %>
+  <h1>Rent a Car</h1>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+  <p class="error"><%= error %></p>
+<% } %>
+
+<div class="reservation-container" style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+    <h1>Rent a Car</h1>
+    
+    <h3>Vehicle: <%= car.make %> <%= car.model %> (<%= car.year %>)</h3>
+    <p>Daily Rate: <strong><span id="base-price" data-price="<%= Number(car.dailyPrice) %>">$<%= car.dailyPrice %></span> per day</strong></p>
+
+    <form action="/clients/rent/<%= car.vehicleId %>" method="POST" id="rental-form">
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label for="startDate" style="display: block; margin-bottom: 5px;">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" required style="width: 100%; padding: 8px; margin-top: 5px;">
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label for="endDate" style="display: block; margin-bottom: 5px;">End Date:</label>
+            <input type="date" id="endDate" name="endDate" required style="width: 100%; padding: 8px; margin-top: 5px;">
+        </div>
+
+        <hr style="margin: 20px 0; border:0; border-top: 1px solid #eee;">
+
+        <div class="price-summary" style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <p>Total Duration: <span id="total-days">0</span> days</p>
+            <h3>Estimated Price: <span style="color: #2ecc71;">$<span id="display-total">0.00</span></span></h3>
+        </div>
+
+        <button type="submit" class="btn-primary" style="background-color: #007bff; color: white; width: 100%; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Request Rental</button>
+    </form>
+</div>
+
+<script src="/utilities/bookingCalculator.js"></script>
