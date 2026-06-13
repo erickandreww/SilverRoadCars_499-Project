@@ -1,34 +1,95 @@
 <section class="vehicles-page">
   <h1><%= title %></h1>
 
+  <form class="vehicle-search-form" action="/vehicles" method="get">
+    <label for="search">Search
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Search by brand, model, color, fuel..."
+        value="<%= filters?.search || '' %>"
+      >
+    </label>
+
+    <label for="category">Category
+      <select id="category" name="category">
+        <option value="">All Categories</option>
+        <option value="Sedan" <%= filters?.category === "Sedan" ? "selected" : "" %>>Sedan</option>
+        <option value="SUV" <%= filters?.category === "SUV" ? "selected" : "" %>>SUV</option>
+        <option value="Hatchback" <%= filters?.category === "Hatchback" ? "selected" : "" %>>Hatchback</option>
+        <option value="Pickup" <%= filters?.category === "Pickup" ? "selected" : "" %>>Pickup</option>
+      </select>
+    </label>
+
+    <label for="transmission">Transmission
+      <select id="transmission" name="transmission">
+        <option value="">All</option>
+        <option value="automatic" <%= filters?.transmission === "automatic" ? "selected" : "" %>>Automatic</option>
+        <option value="manual" <%= filters?.transmission === "manual" ? "selected" : "" %>>Manual</option>
+      </select>
+    </label>
+
+    <label for="availabilityStatus">Availability
+      <select id="availabilityStatus" name="availabilityStatus">
+        <option value="">All</option>
+        <option value="available" <%= filters?.availabilityStatus === "available" ? "selected" : "" %>>Available</option>
+        <option value="reserved" <%= filters?.availabilityStatus === "reserved" ? "selected" : "" %>>Reserved</option>
+        <option value="rented" <%= filters?.availabilityStatus === "rented" ? "selected" : "" %>>Rented</option>
+        <option value="maintenance" <%= filters?.availabilityStatus === "maintenance" ? "selected" : "" %>>Maintenance</option>
+      </select>
+    </label>
+
+    <div class="search-actions">
+      <button type="submit" class="btn-primary">Search</button>
+      <a href="/vehicles" class="clear-link">Clear</a>
+    </div>
+  </form>
+
   <% if (vehicles && vehicles.length > 0) { %>
     <div class="vehicles-grid">
       <% vehicles.forEach(vehicle => { %>
         <a href="/vehicles/<%= vehicle.vehicleId %>" class="vehicle-card">
           <div class="vehicle-card-img">
             <% if (vehicle.imageUrl) { %>
-              <img src="<%= vehicle.imageUrl %>" alt="<%= vehicle.brand %> <%= vehicle.model %>">
+              <img
+                src="<%= vehicle.imageUrl %>"
+                alt="<%= vehicle.brand %> <%= vehicle.model %>"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              >
+              <div class="vehicle-card-no-img" style="display: none;">No Image</div>
             <% } else { %>
               <div class="vehicle-card-no-img">No Image</div>
             <% } %>
+
             <span class="availability-badge avail-<%= vehicle.availabilityStatus %>">
               <%= vehicle.availabilityStatus %>
             </span>
           </div>
+
           <div class="vehicle-card-body">
             <h2><%= vehicle.brand %> <%= vehicle.model %></h2>
-            <p class="vehicle-year"><%= vehicle.year %> · <%= vehicle.category %></p>
+
+            <p class="vehicle-year">
+              <%= vehicle.year %> · <%= vehicle.category || "Vehicle" %>
+            </p>
+
             <div class="vehicle-specs">
-              <span>⚙️ <%= vehicle.transmission %></span>
-              <span>⛽ <%= vehicle.fuelType %></span>
-              <span>💺 <%= vehicle.seats %> seats</span>
+              <span>⚙️ <%= vehicle.transmission || "N/A" %></span>
+              <span>⛽ <%= vehicle.fuelType || "N/A" %></span>
+              <span>💺 <%= vehicle.seats || "N/A" %> seats</span>
             </div>
-            <p class="vehicle-price">$<%= parseFloat(vehicle.dailyPrice).toFixed(2) %><span>/day</span></p>
+
+            <p class="vehicle-price">
+              $<%= parseFloat(vehicle.dailyPrice).toFixed(2) %><span>/day</span>
+            </p>
           </div>
         </a>
       <% }) %>
     </div>
+
+    <%- include("../partials/pagination", { pagination }) %>
   <% } else { %>
-    <p class="no-results">No vehicles available at the moment.</p>
+    <p class="no-results">No vehicles were found.</p>
   <% } %>
 </section>

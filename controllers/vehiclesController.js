@@ -3,15 +3,39 @@ const utilities = require('../utilities/index');
 const { getPageOffset, getPaginationData } = require("../utilities/pagination");
 
 const getAllVehicles = async (req, res, next) => {
-    try {
-    const vehicles = await vehiclesModel.getAllVehicles();
+  try {
+    const { limit, offset } = getPageOffset(req, 9);
+
+    const filters = {
+      search: req.query.search || "",
+      category: req.query.category || "",
+      transmission: req.query.transmission || "",
+      availabilityStatus: req.query.availabilityStatus || ""
+    }; 
+    
+    const totalItems = await vehiclesModel.countVehicleCatalog(filters);
+    const vehicles = await vehiclesModel.getAllVehicles(filters, limit, offset);
+
+    const cleanFilters = Object.fromEntries(
+      Object.entries(filters).filter(([key, value]) => value)
+    );
+
+    const queryString = new URLSearchParams(cleanFilters).toString();
+
+    const pagination = {
+      ...getPaginationData(req, totalItems, limit),
+      queryString
+    };
+    
     res.render("vehicles/vehicles", {
-        title: "Our Fleet",
+        title: "Vehicles",
         vehicles,
+        filters,
+        pagination
     })
-    } catch (err) {
-        next(err);
-    }
+  } catch (err) {
+    next(err);
+  }
 }
 
 const admGetAllVehicles = async (req, res, next) => {
