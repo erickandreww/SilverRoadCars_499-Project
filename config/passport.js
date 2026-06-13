@@ -2,6 +2,9 @@ const passport = require("passport");
 const googleStrategy = require("passport-google-oauth20").Strategy;
 const db = require("./db");
 
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    console.warn("⚠️  Google OAuth not configured — skipping Google strategy.");
+} else {
 passport.use(new googleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -45,6 +48,7 @@ passport.use(new googleStrategy({
         return done(err, null);
     }
 }));
+} // end Google strategy guard
 
 passport.serializeUser((client, done) => {
     done(null, client.clientId); 

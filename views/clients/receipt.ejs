@@ -1,0 +1,71 @@
+<section class="receipt-page">
+
+  <div class="receipt-card" id="receipt">
+
+    <div class="receipt-header">
+      <div class="receipt-brand">
+        <img src="/images/logo.png" alt="Silver Road Cars" class="receipt-logo">
+        <h1>Silver Road Cars</h1>
+      </div>
+      <div class="receipt-meta">
+        <h2>Booking Receipt</h2>
+        <p class="receipt-id">Booking #<%= booking.bookingId.slice(0, 8).toUpperCase() %></p>
+        <p class="receipt-date">Issued: <%= new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) %></p>
+      </div>
+    </div>
+
+    <div class="receipt-status">
+      <span class="status-badge status-<%= booking.bookingStatus %>"><%= booking.bookingStatus %></span>
+    </div>
+
+    <div class="receipt-body">
+
+      <div class="receipt-section">
+        <h3>Client Information</h3>
+        <table class="receipt-table">
+          <tr><th>Name</th><td><%= booking.clientName %></td></tr>
+          <tr><th>Email</th><td><%= booking.clientEmail %></td></tr>
+          <tr><th>Phone</th><td><%= booking.clientPhone || '—' %></td></tr>
+          <tr><th>Address</th><td><%= booking.clientAddress || '—' %></td></tr>
+        </table>
+      </div>
+
+      <div class="receipt-section">
+        <h3>Vehicle Details</h3>
+        <table class="receipt-table">
+          <tr><th>Vehicle</th><td><%= booking.brand %> <%= booking.model %> (<%= booking.year %>)</td></tr>
+          <tr><th>Plate</th><td style="text-transform:uppercase;"><%= booking.plate %></td></tr>
+          <tr><th>Category</th><td style="text-transform:capitalize;"><%= booking.category || '—' %></td></tr>
+          <tr><th>Transmission</th><td style="text-transform:capitalize;"><%= booking.transmission || '—' %></td></tr>
+          <tr><th>Color</th><td style="text-transform:capitalize;"><%= booking.color || '—' %></td></tr>
+          <tr><th>Daily Rate</th><td>$<%= parseFloat(booking.dailyPrice).toFixed(2) %>/day</td></tr>
+        </table>
+      </div>
+
+      <div class="receipt-section">
+        <h3>Rental Period</h3>
+        <table class="receipt-table">
+          <tr><th>Pick-up Date</th><td><%= new Date(booking.startDate).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) %></td></tr>
+          <tr><th>Return Date</th><td><%= new Date(booking.endDate).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) %></td></tr>
+          <tr><th>Duration</th><td><%= booking.totalDays %> day<%= booking.totalDays !== 1 ? 's' : '' %></td></tr>
+          <% if (booking.approvedByName) { %><tr><th>Approved By</th><td><%= booking.approvedByName %></td></tr><% } %>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="receipt-total">
+      <span>Total Charged</span>
+      <span class="receipt-amount">$<%= parseFloat(booking.totalValue).toFixed(2) %></span>
+    </div>
+
+    <p class="receipt-thanks">Thank you for choosing Silver Road Cars. We hope you enjoy your rental!</p>
+
+  </div>
+
+  <div class="receipt-actions no-print">
+    <button onclick="window.print()" class="btn-primary">Print / Save as PDF</button>
+    <a href="/clients" class="btn-secondary">Back to Dashboard</a>
+  </div>
+
+</section>

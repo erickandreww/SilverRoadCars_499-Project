@@ -1,9 +1,34 @@
-<% if (title) { %>
-    <h1><%= title %></h1>
-    <% } else {
-    res.redirect('/')
-} %>
+<section class="vehicles-page">
+  <h1><%= title %></h1>
 
-<%# messages() %>
-
-<%- grid %>
+  <% if (vehicles && vehicles.length > 0) { %>
+    <div class="vehicles-grid">
+      <% vehicles.forEach(vehicle => { %>
+        <a href="/vehicles/<%= vehicle.vehicleId %>" class="vehicle-card">
+          <div class="vehicle-card-img">
+            <% if (vehicle.imageUrl) { %>
+              <img src="<%= vehicle.imageUrl %>" alt="<%= vehicle.brand %> <%= vehicle.model %>">
+            <% } else { %>
+              <div class="vehicle-card-no-img">No Image</div>
+            <% } %>
+            <span class="availability-badge avail-<%= vehicle.availabilityStatus %>">
+              <%= vehicle.availabilityStatus %>
+            </span>
+          </div>
+          <div class="vehicle-card-body">
+            <h2><%= vehicle.brand %> <%= vehicle.model %></h2>
+            <p class="vehicle-year"><%= vehicle.year %> · <%= vehicle.category %></p>
+            <div class="vehicle-specs">
+              <span>⚙️ <%= vehicle.transmission %></span>
+              <span>⛽ <%= vehicle.fuelType %></span>
+              <span>💺 <%= vehicle.seats %> seats</span>
+            </div>
+            <p class="vehicle-price">$<%= parseFloat(vehicle.dailyPrice).toFixed(2) %><span>/day</span></p>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="no-results">No vehicles available at the moment.</p>
+  <% } %>
+</section>

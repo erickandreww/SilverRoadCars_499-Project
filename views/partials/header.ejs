@@ -4,7 +4,11 @@
   <button id="menu"></button>
   <nav>
     <ul>
-      <li><a href="/">Home</a></li>
+      <% if (locals.sessionUser && sessionUser.role === 'client') { %>
+        <li><a href="/clients">Home</a></li>
+      <% } else { %>
+        <li><a href="/">Home</a></li>
+      <% } %>
       <li><a href="/vehicles">Vehicles</a></li>
       <li><a href="/contact">Contact Us</a></li>
       

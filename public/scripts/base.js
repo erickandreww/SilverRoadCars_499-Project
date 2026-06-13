@@ -1,57 +1,50 @@
-//Nav Menu
-
+// Nav Menu
 const hamButton = document.querySelector("#menu");
 const navigation = document.querySelector("ul");
 const span = document.querySelector("#top");
 const actBtn = document.querySelector("#c-link");
 
-hamButton.addEventListener("click", () => {
-  navigation.classList.toggle("open");
-  hamButton.classList.toggle("open");
-  span.classList.toggle("open");
-  actBtn.classList.toggle("open");
-
-});
+if (hamButton) {
+  hamButton.addEventListener("click", () => {
+    if (navigation) navigation.classList.toggle("open");
+    hamButton.classList.toggle("open");
+    if (span) span.classList.toggle("open");
+    if (actBtn) actBtn.classList.toggle("open");
+  });
+}
 
 window.addEventListener("resize", () => {
   if (window.innerWidth >= 600) {
-    navigation.classList.remove("open");
-    hamButton.classList.remove("open");
-    span.classList.remove("open");
-    actBtn.classList.remove("open");
+    if (navigation) navigation.classList.remove("open");
+    if (hamButton) hamButton.classList.remove("open");
+    if (span) span.classList.remove("open");
+    if (actBtn) actBtn.classList.remove("open");
   }
 });
 
-//Carousel 
-
+// Carousel
 const slides = document.querySelectorAll(".slide");
-let current = 0;
+if (slides.length > 0) {
+  let current = 0;
 
-function showSlide(index) {
-  slides[current].classList.remove("active");
+  function showSlide(index) {
+    slides[current].classList.remove("active");
+    current = index;
+    if (current >= slides.length) current = 0;
+    if (current < 0) current = slides.length - 1;
+    slides[current].classList.add("active");
+  }
 
-  current = index;
+  const nextBtn = document.getElementById("next");
+  const prevBtn = document.getElementById("prev");
+  if (nextBtn) nextBtn.addEventListener("click", () => showSlide(current + 1));
+  if (prevBtn) prevBtn.addEventListener("click", () => showSlide(current - 1));
 
-  if (current >= slides.length) current = 0;
-  if (current < 0) current = slides.length - 1;
-
-  slides[current].classList.add("active");
+  setInterval(() => showSlide(current + 1), 7000);
 }
 
-document.getElementById("next").addEventListener("click", () => {
-  showSlide(current - 1);
-});
-
-document.getElementById("prev").addEventListener("click", () => {
-  showSlide(current - 1);
-});
-
-setInterval(() => {
-  showSlide(current + 1);
-}, 7000);
-
-//current year
-var date = new Date();
-var year = date.getFullYear();
-document.querySelector('#current-year').textContent = year;
-document.querySelector('#last-mod').textContent = document.lastModified;
+// Current year / last modified
+const yearEl = document.querySelector('#current-year');
+const lastModEl = document.querySelector('#last-mod');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+if (lastModEl) lastModEl.textContent = document.lastModified;

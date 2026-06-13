@@ -2,9 +2,16 @@ const clientModel = require('../models/clients');
 const jwt = require('jsonwebtoken');
 const vehiclesModel = require('../models/vehicles');
 const bookingsModel = require('../models/bookings');
+const reviewsModel = require('../models/reviews');
 
-const homeController = async (req, res) => {
-  res.render("clients/client", { title: 'Client Home', error: null });
+const homeController = async (req, res, next) => {
+  const clientId = req.authUser.clientId;
+  try {
+    const currentBookings = await bookingsModel.getCurrentBookingsByClientId(clientId);
+    res.render("clients/client", { title: 'Client Home', error: null, currentBookings });
+  } catch (err) {
+    next(err);
+  }
 }
 const profileController = async (req, res) => {
   res.render("clients/profile", { title: 'Client Profile', error: null });
@@ -125,8 +132,10 @@ const getBookingHistory = async (req, res, next) => {
   const clientId = req.authUser.clientId;
   try {
     const bookings = await bookingsModel.getBookingHistoryByClientId(clientId);
+    const reviewedIds = await reviewsModel.getReviewedBookingIds(clientId);
+    const reviewed = req.query.reviewed === '1';
 
-    res.render("clients/bookingHistory", { title: 'Booking History', bookings });
+    res.render("clients/bookingHistory", { title: 'Booking History', bookings, reviewedIds, reviewed });
   } catch (err) {
     console.error("Error fetching booking history:", err);
     next(err);

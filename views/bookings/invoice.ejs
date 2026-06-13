@@ -1,0 +1,88 @@
+<section class="receipt-page">
+  <div class="receipt-card" id="invoice">
+
+    <div class="receipt-header">
+      <div class="receipt-brand">
+        <img src="/images/logo.png" alt="Silver Road Cars" class="receipt-logo">
+        <h1>Silver Road Cars</h1>
+      </div>
+      <div class="receipt-meta">
+        <h2>Invoice</h2>
+        <p class="receipt-id">Booking #<%= booking.bookingId.slice(0, 8).toUpperCase() %></p>
+        <p class="receipt-date">Generated: <%= new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) %></p>
+      </div>
+    </div>
+
+    <div class="receipt-status">
+      <span class="status-badge status-<%= booking.bookingStatus %>"><%= booking.bookingStatus %></span>
+      <% if (booking.approvedByName) { %>
+        <span style="font-family:'Roboto Condensed',sans-serif; font-size:0.88rem; color:#666; margin-left:0.8rem;">
+          Approved by: <strong><%= booking.approvedByName %></strong>
+        </span>
+      <% } %>
+    </div>
+
+    <div class="receipt-body">
+
+      <div class="receipt-section">
+        <h3>Client</h3>
+        <table class="receipt-table">
+          <tr><th>Name</th><td><%= booking.clientName || '—' %></td></tr>
+          <tr><th>Email</th><td><%= booking.clientEmail || '—' %></td></tr>
+          <tr><th>Phone</th><td><%= booking.clientPhone || '—' %></td></tr>
+          <tr><th>Address</th><td><%= booking.clientAddress || '—' %></td></tr>
+        </table>
+      </div>
+
+      <div class="receipt-section">
+        <h3>Vehicle</h3>
+        <table class="receipt-table">
+          <tr><th>Vehicle</th><td><%= booking.brand %> <%= booking.model %> (<%= booking.year %>)</td></tr>
+          <tr><th>Plate</th><td style="text-transform:uppercase;"><%= booking.plate %></td></tr>
+          <tr><th>Category</th><td style="text-transform:capitalize;"><%= booking.category || '—' %></td></tr>
+          <tr><th>Transmission</th><td style="text-transform:capitalize;"><%= booking.transmission || '—' %></td></tr>
+          <tr><th>Fuel</th><td style="text-transform:capitalize;"><%= booking.fuelType || '—' %></td></tr>
+          <tr><th>Seats</th><td><%= booking.seats || '—' %></td></tr>
+          <tr><th>Daily Rate</th><td>$<%= parseFloat(booking.dailyPrice).toFixed(2) %></td></tr>
+        </table>
+      </div>
+
+      <div class="receipt-section">
+        <h3>Rental Period</h3>
+        <table class="receipt-table">
+          <tr><th>Start</th><td><%= new Date(booking.startDate).toLocaleDateString('en-US', { weekday:'short', year:'numeric', month:'short', day:'numeric' }) %></td></tr>
+          <tr><th>End</th><td><%= new Date(booking.endDate).toLocaleDateString('en-US', { weekday:'short', year:'numeric', month:'short', day:'numeric' }) %></td></tr>
+          <tr><th>Days</th><td><%= booking.totalDays %></td></tr>
+        </table>
+      </div>
+
+      <div class="receipt-section">
+        <h3>Booking Timeline</h3>
+        <table class="receipt-table">
+          <tr><th>Created</th><td><%= new Date(booking.createdAt).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) %></td></tr>
+          <tr><th>Last Updated</th><td><%= new Date(booking.updatedAt).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) %></td></tr>
+          <tr><th>Approved By</th><td><%= booking.approvedByName || '—' %></td></tr>
+          <tr><th>Status</th><td style="text-transform:capitalize;"><%= booking.bookingStatus %></td></tr>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="receipt-total">
+      <span>Total Amount</span>
+      <span class="receipt-amount">$<%= parseFloat(booking.totalValue).toFixed(2) %></span>
+    </div>
+
+    <p class="receipt-thanks" style="text-align:left; color:#aaa; font-size:0.8rem; margin-top:1rem;">
+      Full Booking ID: <%= booking.bookingId %>
+    </p>
+
+  </div>
+
+  <div class="receipt-actions no-print">
+    <button onclick="window.print()" class="btn-primary">Print / Save as PDF</button>
+    <a href="/users/bookings/<%= booking.bookingId %>" class="btn-secondary">Back to Booking</a>
+    <a href="/users/bookings" class="btn-secondary">All Bookings</a>
+  </div>
+
+</section>

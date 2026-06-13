@@ -1,5 +1,77 @@
-<div style="padding: 2rem; text-align: center;">
-  <h1>Welcome to Silver Road Cars</h1>
-  <p>Browse our fleet and book your next vehicle.</p>
-  <a href="/vehicles" class="btn-primary" style="display:inline-block; text-decoration:none; padding: 0.75rem 2rem; margin-top: 1rem;">View Vehicles</a>
-</div>
+<main>
+  <div class="hero">
+    <img src="/images/hero.jpg" alt="Hero Image">
+    <a id="c-link" href="/vehicles">
+      <p>Explore Our Fleet</p>
+    </a>
+  </div>
+
+  <div class="cont-form">
+    <form action="/vehicles" method="get">
+      <label>Pickup
+        <select id="pickup" name="pickup">
+          <option value="">Select a pickup location</option>
+          <option value="airport">Airport Branch</option>
+          <option value="downtown">Downtown Branch</option>
+          <option value="hotel">Hotel</option>
+        </select>
+        <div class="datetime">
+          <input type="date" id="p-date" name="p-date" placeholder="mm/dd/yyyy" autocomplete="on" required>
+          <input type="time" id="p-time" name="deliver" title="Enter your pickup time" autocomplete="on" required>
+        </div>
+      </label>
+      <label>Drop-off
+        <select id="dropoff" name="dropoff">
+          <option value="">Select a drop-off location</option>
+          <option value="airport">Airport Branch</option>
+          <option value="downtown">Downtown Branch</option>
+          <option value="hotel">Hotel</option>
+        </select>
+        <div class="datetime">
+          <input type="date" id="d-date" name="d-date" placeholder="mm/dd/yyyy" autocomplete="on" required>
+          <input type="time" id="d-time" name="d-time" title="Enter your drop-off time" autocomplete="on" required>
+        </div>
+      </label>
+      <button type="submit">Book Now</button>
+    </form>
+  </div>
+
+  <section>
+    <div class="carousel">
+      <p>Budget-Friendly Cars</p>
+      <img src="/images/catalog/Agya.jpg" class="slide active" alt="Toyota Agya">
+      <img src="/images/catalog/i10Hatch.jpg" class="slide" alt="Hyundai i10">
+      <img src="/images/catalog/accent.jpg" class="slide" alt="Hyundai Accent">
+      <img src="/images/catalog/yaris.jpg" class="slide" alt="Toyota Yaris">
+      <button id="prev">❮</button>
+      <button id="next">❯</button>
+    </div>
+    <div class="map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d21444.364371607746!2d-111.79171109450445!3d43.82543621051447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53540b03dc48a5cf%3A0x1e5534d3c38ef412!2sUniversidad%20Brigham%20Young%20-%20Idaho!5e0!3m2!1ses-419!2sbr!4v1780777985348!5m2!1ses-419!2sbr"
+        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div id="support">
+    <h3>Support</h3>
+    <a href="/contact">FAQs</a>
+    <a href="/contact">Terms & Conditions</a>
+    <a href="/contact">Privacy Policy</a>
+  </div>
+  <div id="links">
+    <h3>Rentals</h3>
+    <a href="/vehicles">Vehicle Fleet</a>
+    <a href="/vehicles">Special Offers</a>
+  </div>
+  <div id="social">
+    <img src="/images/linkedin-logo.svg" alt="LinkedIn">
+    <img src="/images/facebook-logo.svg" alt="Facebook">
+    <img src="/images/whatsapp-logo.svg" alt="Whatsapp">
+  </div>
+  <p>&#169;<span id="current-year"></span> | BYU-Idaho | CSE-399</p>
+</footer>

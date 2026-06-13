@@ -1,18 +1,48 @@
-<% if (typeof title !== 'undefined' && title) { %>
-  <h1><%= title %></h1>
-<% } else { %>
-  <% } %>
-
-<% if (typeof error !== 'undefined' && error) { %>
-  <p class="error"><%= error %></p>
-<% } %>
-
 <section class="clientHome">
-  <h2>Welcome, <%= sessionUser.clientName || sessionUser.userName %>!</h2>
-  <p>Here you can view your profile, manage your bookings, and update your information.</p>
-  <div class="client-actions">
-    <a href="/clients/profile" class="btn-secondary">View Profile</a>
-    <a href="/clients/bookings/current" class="btn-secondary">My Bookings</a>
+  <h1>Welcome, <%= sessionUser.clientName %>!</h1>
+
+  <div class="client-quick-actions">
+    <a href="/vehicles" class="btn-primary">Browse Vehicles</a>
+    <a href="/clients/profile" class="btn-secondary">My Profile</a>
     <a href="/clients/bookings/history" class="btn-secondary">Booking History</a>
+  </div>
+
+  <div class="client-bookings-section">
+    <h2>Current Bookings</h2>
+
+    <% if (currentBookings && currentBookings.length > 0) { %>
+      <table class="bookings-table">
+        <thead>
+          <tr>
+            <th>Vehicle</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% currentBookings.forEach(booking => { %>
+            <tr>
+              <td><%= booking.brand %> <%= booking.model %></td>
+              <td><%= new Date(booking.startDate).toLocaleDateString() %></td>
+              <td><%= new Date(booking.endDate).toLocaleDateString() %></td>
+              <td style="font-weight:bold;">$<%= parseFloat(booking.totalValue).toFixed(2) %></td>
+              <td><span class="status-badge status-<%= booking.bookingStatus %>"><%= booking.bookingStatus %></span></td>
+              <td>
+                <% if (booking.bookingStatus === 'approved') { %>
+                  <a href="/clients/payment/<%= booking.bookingId %>" class="btn-review">Pay Now</a>
+                <% } else { %>
+                  <span style="color:#aaa;">—</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p style="color:#888; margin-top:1rem;">You have no active bookings. <a href="/vehicles">Browse vehicles</a> to get started.</p>
+    <% } %>
   </div>
 </section>

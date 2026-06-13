@@ -23,6 +23,7 @@ router.post('/maintenance/delete', maintenanceController.deleteMaintenance);
 // Bookings
 router.get('/bookings', bookingsController.getAllBookings)
 router.get('/bookings/requests', bookingsController.getBookingsRequests)
+router.get('/bookings/:bookingId/invoice', bookingsController.getInvoice)
 router.get('/bookings/:bookingId', bookingsController.getBooking)
 
 router.post('/bookings/approve', bookingsController.approveBooking)

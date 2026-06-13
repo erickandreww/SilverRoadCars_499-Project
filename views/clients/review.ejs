@@ -1,0 +1,33 @@
+<section class="review-page">
+  <div class="review-card">
+    <h1>Leave a Review</h1>
+    <p class="review-vehicle-name"><%= booking.brand %> <%= booking.model %> · <%= new Date(booking.startDate).toLocaleDateString() %> – <%= new Date(booking.endDate).toLocaleDateString() %></p>
+
+    <% if (error) { %>
+      <p class="auth-error"><%= error %></p>
+    <% } %>
+
+    <form action="/clients/review/<%= booking.bookingId %>" method="POST" class="review-form">
+
+      <div class="form-group">
+        <label>Your Rating</label>
+        <div class="star-rating">
+          <% for (let i = 5; i >= 1; i--) { %>
+            <input type="radio" id="star<%= i %>" name="rating" value="<%= i %>" required>
+            <label for="star<%= i %>" title="<%= i %> star<%= i > 1 ? 's' : '' %>">★</label>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="comment">Your Comment <span style="font-weight:400; color:#888;">(optional)</span></label>
+        <textarea id="comment" name="comment" rows="5" placeholder="How was your experience with this vehicle?"></textarea>
+      </div>
+
+      <div class="review-actions">
+        <a href="/clients/bookings/history" class="btn-secondary">Cancel</a>
+        <button type="submit" class="btn-primary">Submit Review</button>
+      </div>
+    </form>
+  </div>
+</section>

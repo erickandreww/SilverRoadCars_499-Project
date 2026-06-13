@@ -173,5 +173,13 @@
     <p class="notice">Booking not found.</p>
   <% } %>
 
+  <% if (data && (data.bookingStatus === 'active' || data.bookingStatus === 'completed')) { %>
+    <div style="margin-top: 1.5rem;">
+      <a href="/users/bookings/<%= data.bookingId %>/invoice" class="btn-primary" style="text-decoration:none; display:inline-block;">
+        🧾 View Invoice
+      </a>
+    </div>
+  <% } %>
+
   <a href="/users/bookings" class="return-link">Return to Bookings</a>
 </section>

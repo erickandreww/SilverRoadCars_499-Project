@@ -4,51 +4,55 @@
   <h1>Booking History</h1>
 <% } %>
 
+<% if (reviewed) { %>
+  <p class="contact-success" style="background:#e6f9ee; border:1px solid #2ecc71; border-radius:6px; padding:0.8rem 1.2rem; margin-bottom:1rem; color:#1a7a40;">
+    Thanks for your review!
+  </p>
+<% } %>
+
 <% if (typeof error !== 'undefined' && error) { %>
-  <p class="error" style="color: red; font-weight: bold;"><%= error %></p>
+  <p class="auth-error"><%= error %></p>
 <% } %>
 
 <section class="booking-history">
   <% if (locals.bookings && bookings.length > 0) { %>
-    <table class="bookings-table" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <table class="bookings-table">
       <thead>
-        <tr style="background-color: #f2f2f2; text-align: left;">
-          <th style="padding: 10px; border: 1px solid #ddd;">Vehicle</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Plate</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Start Date</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">End Date</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Total Paid</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Status</th>
+        <tr>
+          <th>Vehicle</th>
+          <th>Plate</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Total Paid</th>
+          <th>Status</th>
+          <th>Review</th>
         </tr>
       </thead>
       <tbody>
         <% bookings.forEach(booking => { %>
           <tr>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-              <%= booking.brand %> <%= booking.model %>
+            <td><%= booking.brand %> <%= booking.model %></td>
+            <td style="text-transform:uppercase;"><%= booking.plate %></td>
+            <td><%= new Date(booking.startDate).toLocaleDateString() %></td>
+            <td><%= new Date(booking.endDate).toLocaleDateString() %></td>
+            <td style="font-weight:bold; color:#2ecc71;">$<%= parseFloat(booking.totalValue).toFixed(2) %></td>
+            <td><span class="status-badge status-<%= booking.bookingStatus %>"><%= booking.bookingStatus %></span></td>
+            <td>
+              <% if (booking.bookingStatus === 'completed') { %>
+                <% if (reviewedIds.has(booking.bookingId)) { %>
+                  <span class="reviewed-badge">✓ Reviewed</span>
+                <% } else { %>
+                  <a href="/clients/review/<%= booking.bookingId %>" class="btn-review">Leave a Review</a>
+                <% } %>
+              <% } else { %>
+                <span style="color:#aaa;">—</span>
+              <% } %>
             </td>
-            <td style="padding: 10px; border: 1px solid #ddd; text-transform: uppercase;">
-              <%= booking.plate %>
-            </td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-              <%= new Date(booking.startDate).toLocaleDateString() %>
-            </td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-              <%= new Date(booking.endDate).toLocaleDateString() %>
-            </td>
-            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #2ecc71;">
-              $<%= parseFloat(booking.totalValue).toFixed(2) %>
-            </td>
-            <td style="padding: 10px; border: 1px solid #ddd;">
-              <span style="text-transform: capitalize; font-weight: bold;">
-                <%= booking.bookingStatus %>
-              </span>
-            </td>
-            </tr>
+          </tr>
         <% }) %>
       </tbody>
     </table>
-    <% } else { %>
-    <p style="margin-top: 20px; color: #666;">You have no past bookings.</p>
+  <% } else { %>
+    <p style="margin-top:1.5rem; color:#666;">You have no past bookings.</p>
   <% } %>
 </section>

@@ -1,9 +1,8 @@
 var express = require('express');
 var router = express.Router();
+const controller = require('../controllers/contactController');
 
-/* GET Contact Page. */
-router.get('/', function(req, res, next) {
-  res.send('Contact Us page');
-});
+router.get('/', controller.contactView);
+router.post('/', controller.submitContact);
 
 module.exports = router;

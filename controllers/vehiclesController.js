@@ -4,11 +4,10 @@ const { getPageOffset, getPaginationData } = require("../utilities/pagination");
 
 const getAllVehicles = async (req, res, next) => {
     try {
-    const data =await vehiclesModel.getAllVehicles();
-    const grid =await utilities.getVehiclesGrid(data);
+    const vehicles = await vehiclesModel.getAllVehicles();
     res.render("vehicles/vehicles", {
-        title: "Vehicles",
-        grid,
+        title: "Our Fleet",
+        vehicles,
     })
     } catch (err) {
         next(err);
@@ -37,17 +36,23 @@ const admGetAllVehicles = async (req, res, next) => {
 const getCar = async (req, res, next) => {
     const carId = req.params.carId;
     try {
-    const data = await vehiclesModel.getCar(carId);
-    if (!data) {
+    const vehicle = await vehiclesModel.getCar(carId);
+    if (!vehicle) {
         const err = new Error("Vehicle not found");
         err.status = 404;
         return next(err);
     }
-    const carInformation = await utilities.getVehiclesGridId(data);
+    const reviewsModel = require('../models/reviews');
+    const reviews = await reviewsModel.getReviewsByVehicleId(carId);
+    const avgRating = reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : null;
 
     res.render("vehicles/car", {
-        title: data.brand + " " + data.model,
-        carInformation,
+        title: vehicle.brand + " " + vehicle.model,
+        vehicle,
+        reviews,
+        avgRating,
     })
     } catch (err) {
         console.error(`error fetching vehicle with ID ${carId}:`, err);

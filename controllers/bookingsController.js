@@ -167,18 +167,58 @@ const buildPaymentPage = async (req, res, next) => {
 const processPayment = async (req, res, next) => {
   const { bookingId } = req.params;
   try {
-    const result = await bookingsModel.activateBooking(bookingId);
+    const booking = await bookingsModel.getBookingById(bookingId);
 
-    if (!result) {
-      const err = new Error("Payment could not be processed")
+    if (!booking) {
+      const err = new Error("Booking not found");
+      err.status = 404;
+      return next(err);
+    }
+
+    if (booking.bookingStatus === 'active') {
+      return res.redirect(`/clients/receipt/${bookingId}`);
+    }
+
+    if (booking.bookingStatus === 'pending') {
+      const err = new Error("This booking has not been approved yet. Please wait for staff to approve it before paying.");
       err.status = 400;
       return next(err);
     }
 
-    res.redirect(`/clients/bookings/current`);
+    if (booking.bookingStatus !== 'approved') {
+      const err = new Error(`This booking cannot be paid (status: ${booking.bookingStatus}).`);
+      err.status = 400;
+      return next(err);
+    }
+
+    const result = await bookingsModel.activateBooking(bookingId);
+
+    if (!result) {
+      const err = new Error("Payment could not be processed. Please try again.");
+      err.status = 400;
+      return next(err);
+    }
+
+    res.redirect(`/clients/receipt/${bookingId}`);
   } catch (err) {
     console.error(`Error processing payment for booking ${bookingId}:`, err);
     err.status = 500;
+    next(err);
+  }
+}
+
+const getReceipt = async (req, res, next) => {
+  const { bookingId } = req.params;
+  const clientId = req.authUser.clientId;
+  try {
+    const booking = await bookingsModel.getBookingById(bookingId);
+
+    if (!booking || booking.clientId !== clientId) {
+      return res.redirect('/clients/bookings/current');
+    }
+
+    res.render('clients/receipt', { title: 'Booking Receipt', booking });
+  } catch (err) {
     next(err);
   }
 }
@@ -203,5 +243,22 @@ const cancelBooking = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllBookings, getBookingsRequests, getBooking, approveBooking, 
-  rejectBooking, closeBooking, buildPaymentPage, processPayment, cancelBooking }
+const getInvoice = async (req, res, next) => {
+  const { bookingId } = req.params;
+  try {
+    const booking = await bookingsModel.getBookingById(bookingId);
+
+    if (!booking) {
+      const err = new Error("Booking not found");
+      err.status = 404;
+      return next(err);
+    }
+
+    res.render('bookings/invoice', { title: 'Invoice', booking });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { getAllBookings, getBookingsRequests, getBooking, approveBooking,
+  rejectBooking, closeBooking, buildPaymentPage, processPayment, cancelBooking, getReceipt, getInvoice }

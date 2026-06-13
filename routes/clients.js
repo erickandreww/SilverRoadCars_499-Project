@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const clientsController = require('../controllers/clientsController');
 const bookingsController = require('../controllers/bookingsController');
+const reviewsController = require('../controllers/reviewsController');
 const multer = require('multer');
 const {verifyToken, requireClient} = require('../middleware/middleware');
 const upload = multer({ dest: 'public/uploads/' });
@@ -18,6 +19,10 @@ router.get('/rent/:vehicleId', verifyToken, requireClient, clientsController.get
 router.post('/rent/:vehicleId', clientsController.createBookingClient);
 
 router.get('/payment/:bookingId', bookingsController.buildPaymentPage);
+
+router.get('/receipt/:bookingId', verifyToken, requireClient, bookingsController.getReceipt);
+router.get('/review/:bookingId', verifyToken, requireClient, reviewsController.getReviewForm);
+router.post('/review/:bookingId', verifyToken, requireClient, reviewsController.submitReview);
 
 /* GET Clients Page. */
 router.get('/', clientsController.homeController);
